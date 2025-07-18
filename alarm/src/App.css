@@ -1,12 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap');
+
 body {
   font-family: 'Segoe UI', sans-serif;
   background: radial-gradient(circle at center, #0a1f3d, #090e1f);
   height: 100vh;
+  margin: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
-  margin: 0;
 }
 
 .alarm-wrapper {
@@ -16,126 +18,133 @@ body {
 
 .top-clock {
   background: #111;
-  color: white;
-  padding: 1rem 1.5rem;
+  padding: 1rem 2rem;
   border-radius: 1rem;
-  font-size: 2rem;
-  font-weight: bold;
-  cursor: pointer;
+  font-size: 2.5rem;
+  font-family: 'Orbitron', sans-serif;
   display: inline-flex;
   align-items: center;
-  gap: 0.8rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  transition: background 0.3s;
-}
-.top-clock:hover {
-  background: #222;
+  gap: 1rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+  user-select: none;
 }
 
 .clock-icon {
-  font-size: 1.5rem;
+  font-size: 1.8rem;
 }
 
 .picker-overlay {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   background: #1e1e2f;
-  padding: 2rem;
+  padding: 2rem 3rem;
   border-radius: 1rem;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
-  z-index: 10;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+  animation: fadeIn 0.5s ease-in-out;
 }
 
 .picker-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 1rem;
+  gap: 1.5rem;
 }
 
 .picker-input {
-  font-size: 1.5rem;
-  padding: 0.6rem 1rem;
+  font-size: 2rem;
+  padding: 0.8rem 1.2rem;
   border-radius: 0.5rem;
   border: none;
   background: #2c2c3d;
   color: white;
+  font-family: 'Orbitron', sans-serif;
+  text-align: center;
+}
+
+.confirm-btn {
+  background: #1976d2;
+  color: white;
+  padding: 0.8rem 2rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+.confirm-btn:hover {
+  background: #1565c0;
+  transform: translateY(-2px);
 }
 
 .alarm-card {
-  padding: 2rem;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 1rem;
   margin-top: 2rem;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.4s ease;
 }
 
 .alarm-time {
   font-size: 4rem;
-  font-weight: bold;
+  font-family: 'Orbitron', sans-serif;
   display: flex;
-  justify-content: center;
   align-items: baseline;
+  justify-content: center;
   gap: 0.5rem;
 }
 
 .am-pm {
   font-size: 1.5rem;
-  font-weight: 300;
+  opacity: 0.6;
 }
 
 .alarm-label {
+  margin-top: 0.5rem;
   font-size: 1.2rem;
-  color: #aaa;
-  margin: 0.5rem 0 2rem;
+  color: #ccc;
 }
 
 .alarm-buttons {
+  margin-top: 2rem;
   display: flex;
   justify-content: center;
   gap: 1rem;
 }
 
-button {
+button.stop {
+  background: #e53935;
+}
+button.repeat {
+  background: #3f51b5;
+}
+button.stop, button.repeat {
+  color: white;
   font-size: 1rem;
-  padding: 0.75rem 1.5rem;
+  padding: 0.8rem 1.5rem;
   border: none;
   border-radius: 8px;
-  cursor: pointer;
   font-weight: bold;
-  transition: transform 0.2s;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
-button:hover {
-  transform: scale(1.05);
-}
-
-.stop {
-  background: #e53935;
-  color: white;
-}
-
-.repeat {
-  background: #3f51b5;
-  color: white;
+button.stop:hover,
+button.repeat:hover {
+  transform: translateY(-2px);
 }
 
 .waiting {
-  margin-top: 1rem;
-  color: #ffaaaa;
-  font-size: 0.9rem;
+  margin-top: 1.5rem;
+  color: #ff9e9e;
+  font-size: 1rem;
 }
 
-.confirm-btn {
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
-  background-color: #1976d2;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
 }
-.confirm-btn:hover {
-  background-color: #1565c0;
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
 }

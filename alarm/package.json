@@ -5,11 +5,11 @@
   "type": "module",
   "main": "electron/main.js",
   "scripts": {
-    "dev": "concurrently \"vite\" \"wait-on http://localhost:5173 && electron .\"",
+    "dev": "concurrently -k \"vite\" \"wait-on http://localhost:5173 && electron electron/main.ts\"",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "lint": "eslint .",
-    "start": "electron .",
+    "start": "electron electron/main.ts",
     "dist": "vite build && electron-builder"
   },
   "build": {
@@ -20,7 +20,8 @@
     },
     "files": [
       "dist",
-      "electron"
+      "electron",
+      "public"
     ],
     "extraMetadata": {
       "main": "electron/main.js"
