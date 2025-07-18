@@ -27,7 +27,8 @@ npm install
 npm run dev
 
 
-### Para empacotar como app executável:
+### 📦 Como gerar o aplicativo instalável (modo produção)
+
 ```bash
 npm run build
 npm run dist
