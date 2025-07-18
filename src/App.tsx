@@ -1,15 +1,15 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import "./App.css";
 
 export default function App() {
-  const [alarmTime, setAlarmTime] = useState("");
-  const [tempTime, setTempTime] = useState("");
   const [isRinging, setIsRinging] = useState(false);
   const [canStop, setCanStop] = useState(false);
+  const [nextAlarm, setNextAlarm] = useState("");
 
   const audioRef1 = useRef(new Audio("/assets/alarm.wav"));
   const audioRef2 = useRef(new Audio("/assets/alarm.wav"));
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const ALARM_HOURS = [4, 5, 6];
 
   const triggerAlarm = useCallback(() => {
     setIsRinging(true);
@@ -23,7 +23,9 @@ export default function App() {
       audio.play().catch(() => {});
     });
 
-    setTimeout(() => setCanStop(true), 5 * 60 * 1000);
+    setTimeout(() => {
+      setCanStop(true);
+    }, 5 * 60 * 1000);
   }, []);
 
   const stopAlarm = () => {
@@ -35,45 +37,60 @@ export default function App() {
     window.electronAPI?.setAlarmStatus(false);
   };
 
-  const repeatAlarm = () => {
-    stopAlarm();
-    const [h, m] = alarmTime.split(":").map(Number);
+  const getNextAlarmLabel = () => {
+    const now = new Date();
     const next = new Date();
-    next.setHours(h);
-    next.setMinutes(m + 5);
-    const formatted = `${String(next.getHours()).padStart(2, "0")}:${String(
-      next.getMinutes()
-    ).padStart(2, "0")}`;
-    setAlarmTime(formatted);
+
+    for (const hour of ALARM_HOURS) {
+      if (now.getHours() < hour || (now.getHours() === hour && now.getMinutes() < 1)) {
+        next.setHours(hour);
+        next.setMinutes(0);
+        return `${String(hour).padStart(2, "0")}:00`;
+      }
+    }
+
+    next.setDate(next.getDate() + 1);
+    next.setHours(ALARM_HOURS[0]);
+    next.setMinutes(0);
+    return `${String(ALARM_HOURS[0]).padStart(2, "0")}:00`;
   };
 
   useEffect(() => {
-    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-      if (isRinging) {
-        e.preventDefault();
-        e.returnValue = "O alarme está tocando. Você não pode sair agora.";
-        return "O alarme está tocando. Você não pode sair agora.";
+    const timer = setInterval(() => {
+      const now = new Date();
+      if (
+        ALARM_HOURS.includes(now.getHours()) &&
+        now.getMinutes() === 0 &&
+        now.getSeconds() === 0 &&
+        !isRinging
+      ) {
+        triggerAlarm();
       }
-    };
-    window.addEventListener("beforeunload", handleBeforeUnload);
-    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
-  }, [isRinging]);
+    }, 1000);
+
+    setNextAlarmLabel();
+    return () => clearInterval(timer);
+  }, [triggerAlarm, isRinging]);
+
+  const setNextAlarmLabel = () => {
+    const label = getNextAlarmLabel();
+    setNextAlarm(label);
+  };
 
   useEffect(() => {
     const blockKeys = (e: KeyboardEvent) => {
       if (!isRinging) return;
 
-      const isMac = navigator.platform.toUpperCase().includes("MAC");
+      const forbidden = ["F1", "F2", "F3", "F5"];
+      const isExitKey =
+        (e.key === "F4" && e.altKey) ||
+        (e.ctrlKey && e.key.toLowerCase() === "c") ||
+        forbidden.includes(e.key);
 
-      if (
-        e.key === "F5" ||
-        (e.key.toLowerCase() === "r" && (e.ctrlKey || (isMac && e.metaKey))) ||
-        (e.key === "F5" && e.altKey) ||
-        (e.key === "F4" && e.altKey)
-      ) {
+      if (isExitKey) {
         e.preventDefault();
         e.stopPropagation();
-        alert("Você não pode atualizar ou sair enquanto o alarme está tocando.");
+        alert("Você não pode sair ou baixar o volume durante o alarme.");
       }
     };
 
@@ -81,75 +98,25 @@ export default function App() {
     return () => window.removeEventListener("keydown", blockKeys);
   }, [isRinging]);
 
-  useEffect(() => {
-    if (alarmTime) {
-      intervalRef.current = setInterval(() => {
-        const now = new Date();
-        const current = now.toTimeString().slice(0, 5);
-        if (current === alarmTime && !isRinging) {
-          triggerAlarm();
-        }
-      }, 1000);
-    }
-
-    return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-    };
-  }, [alarmTime, isRinging, triggerAlarm]);
-
   return (
     <div className="alarm-wrapper">
-      {alarmTime && (
-        <div className="top-clock">
-          {alarmTime}
-          <span className="clock-icon">⏰</span>
-        </div>
-      )}
+      <div className="top-clock">
+        Próximo Alarme: {nextAlarm}
+        <span className="clock-icon">⏰</span>
+      </div>
 
-      {!alarmTime && (
-        <div className="picker-overlay">
-          <div className="picker-container">
-            <input
-              type="time"
-              className="picker-input"
-              value={tempTime}
-              onChange={(e) => setTempTime(e.target.value)}
-            />
-            <button
-              className="confirm-btn"
-              onClick={() => {
-                setAlarmTime(tempTime);
-              }}
-            >
-              Confirmar
-            </button>
-          </div>
-        </div>
-      )}
-
-      {alarmTime && (
+      {isRinging && (
         <div className="alarm-card">
-          <div className="alarm-time">
-            {alarmTime}
-            <span className="am-pm">AM</span>
-          </div>
+          <div className="alarm-time">TOCANDO</div>
+          <div className="alarm-label">Alarme Automático</div>
 
-          <div className="alarm-label">Hora do Alarme</div>
-
-          {isRinging ? (
-            canStop ? (
-              <div className="alarm-buttons">
-                <button className="stop" onClick={stopAlarm}>
-                  Parar Alarme
-                </button>
-                <button className="repeat" onClick={repeatAlarm}>
-                  Repetir Alarme
-                </button>
-              </div>
-            ) : (
-              <p className="waiting">Espere 5 minutos para parar o alarme</p>
-            )
-          ) : null}
+          {canStop ? (
+            <button className="stop" onClick={stopAlarm}>
+              Parar Alarme
+            </button>
+          ) : (
+            <p className="waiting">Espere 5 minutos para parar o alarme</p>
+          )}
         </div>
       )}
     </div>
