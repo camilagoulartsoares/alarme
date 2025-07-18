@@ -25,7 +25,7 @@ Este é um aplicativo de alarme multiplataforma, construído com **React, Vite e
 ```bash
 npm install
 npm run dev
-
+```
 
 ### 📦 Como gerar o aplicativo instalável (modo produção)
 
