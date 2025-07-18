@@ -1,45 +1,47 @@
-import { app, BrowserWindow, ipcMain } from "electron";
+import { app, BrowserWindow, ipcMain, screen } from "electron";
 import path from "path";
 
-let win: BrowserWindow | null = null;
 let alarmIsRinging = false;
+let windows: BrowserWindow[] = [];
 
-const createWindow = () => {
-  console.log("Criando janela do Electron");
+const createWindows = () => {
+  const displays = screen.getAllDisplays();
+  windows = [];
 
-  win = new BrowserWindow({
-    fullscreen: true,
-    frame: false,
-    webPreferences: {
-      preload: path.join(__dirname, "preload.js"),
-    },
-  });
+  displays.forEach((display, index) => {
+    const win = new BrowserWindow({
+      x: display.bounds.x,
+      y: display.bounds.y,
+      width: display.bounds.width,
+      height: display.bounds.height,
+      fullscreen: true,
+      frame: false,
+      webPreferences: {
+        preload: path.join(__dirname, "preload.js"),
+      },
+    });
 
-  win.setMenuBarVisibility(false);
+    win.setMenuBarVisibility(false);
 
-  win.on("close", (e) => {
-    if (alarmIsRinging) {
-      console.log("Tentaram fechar, mas alarme está tocando");
-      e.preventDefault();
-    }
-  });
+    win.on("close", (e) => {
+      if (alarmIsRinging) e.preventDefault();
+    });
 
-  win.loadURL("http://localhost:5173").then(() => {
-    console.log("URL carregada com sucesso");
-  }).catch((err) => {
-    console.error("Erro ao carregar URL:", err);
+    win.loadURL("http://localhost:5173");
+
+    windows.push(win);
   });
 };
 
 ipcMain.on("set-alarm-status", (_, isRinging: boolean) => {
   alarmIsRinging = isRinging;
-  console.log("Alarme está tocando?", isRinging);
 });
 
 app.whenReady().then(() => {
-  createWindow();
+  createWindows();
+
   app.on("activate", () => {
-    if (BrowserWindow.getAllWindows().length === 0) createWindow();
+    if (BrowserWindow.getAllWindows().length === 0) createWindows();
   });
 });
 

@@ -7,6 +7,7 @@ export default function App() {
   const [nextFixedAlarm, setNextFixedAlarm] = useState("");
   const [isRinging, setIsRinging] = useState(false);
   const [canStop, setCanStop] = useState(false);
+  const [canClose, setCanClose] = useState(false);
 
   const audioRef1 = useRef(new Audio("/assets/alarm.wav"));
   const audioRef2 = useRef(new Audio("/assets/alarm.wav"));
@@ -16,24 +17,27 @@ export default function App() {
   const triggerAlarm = useCallback(() => {
     setIsRinging(true);
     setCanStop(false);
-  
+    setCanClose(false);
     window.electronAPI?.setAlarmStatus(true);
-  
+
     for (let i = 0; i < 3; i++) {
       const audio = new Audio("/assets/alarm.wav");
       audio.loop = true;
-      audio.volume = 1; 
+      audio.volume = 1;
       audio.play().catch(() => {});
     }
-  
+
     setTimeout(() => {
       setCanStop(true);
-    }, 5 * 60 * 1000);
+    }, 5 * 60 * 1000); // 5 minutos para parar o alarme
+
+    setTimeout(() => {
+      setCanClose(true);
+    }, 2 * 60 * 1000); // 2 minutos para liberar o botão de fechar
   }, []);
-  
 
   const stopAlarm = () => {
-    [audioRef1.current, audioRef2.current].forEach(audio => {
+    [audioRef1.current, audioRef2.current].forEach((audio) => {
       audio.pause();
       audio.currentTime = 0;
     });
@@ -109,6 +113,12 @@ export default function App() {
 
   return (
     <div className="alarm-wrapper">
+      {canClose && (
+        <button className="close-button" onClick={() => window.close()}>
+          ❌
+        </button>
+      )}
+
       {alarmTime && (
         <div className="top-clock">
           Alarme Manual: {alarmTime}
