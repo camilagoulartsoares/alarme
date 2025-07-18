@@ -3,9 +3,12 @@ import './App.css'
 
 export default function App() {
   const [alarmTime, setAlarmTime] = useState('')
+  const [tempTime, setTempTime] = useState('')
   const [isRinging, setIsRinging] = useState(false)
   const [canStop, setCanStop] = useState(false)
-  const audioRef = useRef(new Audio('/assets/alarm.mp3'))
+  const [showTimePicker, setShowTimePicker] = useState(false)
+
+  const audioRef = useRef(new Audio('/assets/alarm.wav'))
   const intervalRef = useRef<number>()
 
   useEffect(() => {
@@ -18,8 +21,21 @@ export default function App() {
         }
       }, 1000)
     }
+
     return () => clearInterval(intervalRef.current)
   }, [alarmTime])
+
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (isRinging) {
+        e.preventDefault()
+        e.returnValue = ''
+      }
+    }
+
+    window.addEventListener('beforeunload', handleBeforeUnload)
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload)
+  }, [isRinging])
 
   const triggerAlarm = () => {
     const audio = audioRef.current
@@ -29,7 +45,6 @@ export default function App() {
     audio.play()
     fadeInVolume(audio)
     setCanStop(false)
-
     setTimeout(() => setCanStop(true), 5 * 60 * 1000)
   }
 
@@ -44,8 +59,9 @@ export default function App() {
   }
 
   const stopAlarm = () => {
-    audioRef.current.pause()
-    audioRef.current.currentTime = 0
+    const audio = audioRef.current
+    audio.pause()
+    audio.currentTime = 0
     setIsRinging(false)
     setAlarmTime('')
     clearInterval(intervalRef.current)
@@ -63,13 +79,35 @@ export default function App() {
 
   return (
     <div className="alarm-wrapper">
-      {!isRinging && (
-        <input
-          type="time"
-          className="alarm-input"
-          value={alarmTime}
-          onChange={(e) => setAlarmTime(e.target.value)}
-        />
+      <div
+        className="top-clock"
+        onClick={() => {
+          setTempTime(alarmTime || '')
+          setShowTimePicker(true)
+        }}
+      >
+        {alarmTime || '--:--'}
+        <span className="clock-icon">🕒</span>
+      </div>
+
+      {showTimePicker && (
+        <div className="picker">
+          <input
+            type="time"
+            className="picker-input"
+            value={tempTime}
+            onChange={(e) => setTempTime(e.target.value)}
+          />
+          <button
+            className="confirm-btn"
+            onClick={() => {
+              setAlarmTime(tempTime)
+              setShowTimePicker(false)
+            }}
+          >
+            Confirmar
+          </button>
+        </div>
       )}
 
       {alarmTime && (
@@ -81,18 +119,16 @@ export default function App() {
 
           <div className="alarm-label">Hora do Alarme</div>
 
-          <div className="alarm-buttons">
-            <button className="stop" onClick={stopAlarm} disabled={!canStop}>
-              Parar Alarme
-            </button>
-            <button className="repeat" onClick={repeatAlarm} disabled={!canStop}>
-              Repetir Alarme
-            </button>
-          </div>
-
-          {isRinging && !canStop && (
-            <p className="waiting">Espere 5 minutos para parar o alarme</p>
-          )}
+          {isRinging ? (
+            canStop ? (
+              <div className="alarm-buttons">
+                <button className="stop" onClick={stopAlarm}>Parar Alarme</button>
+                <button className="repeat" onClick={repeatAlarm}>Repetir Alarme</button>
+              </div>
+            ) : (
+              <p className="waiting">Espere 5 minutos para parar o alarme</p>
+            )
+          ) : null}
         </div>
       )}
     </div>
