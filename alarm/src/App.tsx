@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import "./App.css";
 
 export default function App() {
@@ -9,7 +9,18 @@ export default function App() {
   const [showTimePicker, setShowTimePicker] = useState(false);
 
   const audioRef = useRef(new Audio("/assets/alarm.wav"));
-  const intervalRef = useRef<number>();
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const triggerAlarm = useCallback(() => {
+    const audio = audioRef.current;
+    setIsRinging(true);
+    audio.loop = true;
+    audio.volume = 0;
+    audio.play();
+    fadeInVolume(audio);
+    setCanStop(false);
+    setTimeout(() => setCanStop(true), 5 * 60 * 1000);
+  }, []);
 
   useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
@@ -34,22 +45,13 @@ export default function App() {
       }, 1000);
     }
 
-    return () => clearInterval(intervalRef.current);
-  }, [alarmTime]);
-
-  const triggerAlarm = () => {
-    const audio = audioRef.current;
-    setIsRinging(true);
-    audio.loop = true;
-    audio.volume = 0;
-    audio.play();
-    fadeInVolume(audio);
-    setCanStop(false);
-    setTimeout(() => setCanStop(true), 5 * 60 * 1000);
-  };
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
+  }, [alarmTime, isRinging, triggerAlarm]);
 
   const fadeInVolume = (audio: HTMLAudioElement) => {
-    const interval = setInterval(() => {
+    const interval: ReturnType<typeof setInterval> = setInterval(() => {
       if (audio.volume < 1) {
         audio.volume = Math.min(1, audio.volume + 0.01);
       } else {
@@ -63,8 +65,8 @@ export default function App() {
     audio.pause();
     audio.currentTime = 0;
     setIsRinging(false);
-    setAlarmTime("");
-    clearInterval(intervalRef.current);
+    setShowTimePicker(false);
+    if (intervalRef.current) clearInterval(intervalRef.current);
   };
 
   const repeatAlarm = () => {
