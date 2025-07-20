@@ -1,36 +1,24 @@
-import { app, BrowserWindow, ipcMain, screen } from "electron";
+import { app, BrowserWindow, ipcMain } from "electron";
 import path from "path";
 
 let alarmIsRinging = false;
-let windows: BrowserWindow[] = [];
 
-const createWindows = () => {
-  const displays = screen.getAllDisplays();
-  windows = [];
-
-  displays.forEach((display, index) => {
-    const win = new BrowserWindow({
-      x: display.bounds.x,
-      y: display.bounds.y,
-      width: display.bounds.width,
-      height: display.bounds.height,
-      fullscreen: true,
-      frame: false,
-      webPreferences: {
-        preload: path.join(__dirname, "preload.js"),
-      },
-    });
-
-    win.setMenuBarVisibility(false);
-
-    win.on("close", (e) => {
-      if (alarmIsRinging) e.preventDefault();
-    });
-
-    win.loadURL("http://localhost:5173");
-
-    windows.push(win);
+const createWindow = () => {
+  const win = new BrowserWindow({
+    fullscreen: true,
+    frame: false,
+    webPreferences: {
+      preload: path.join(__dirname, "preload.js"),
+    },
   });
+
+  win.setMenuBarVisibility(false);
+
+  win.on("close", (e) => {
+    if (alarmIsRinging) e.preventDefault();
+  });
+
+  win.loadURL("http://localhost:5173");
 };
 
 ipcMain.on("set-alarm-status", (_, isRinging: boolean) => {
@@ -38,10 +26,10 @@ ipcMain.on("set-alarm-status", (_, isRinging: boolean) => {
 });
 
 app.whenReady().then(() => {
-  createWindows();
+  createWindow();
 
   app.on("activate", () => {
-    if (BrowserWindow.getAllWindows().length === 0) createWindows();
+    if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });
 });
 
