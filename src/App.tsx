@@ -27,6 +27,7 @@ export default function App() {
       audio.play().catch(() => {});
     }
   
+    
     setTimeout(() => setCanStop(true), 5 * 60 * 1000); // 5 minutos para parar o alarme
     setTimeout(() => setCanClose(true), 4 * 60 * 1000); // 4 minutos para liberar o botão de fechar
   }, []);
