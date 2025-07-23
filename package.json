@@ -3,12 +3,11 @@
   "version": "1.0.0",
   "private": true,
   "main": "electron/main.js",
-"scripts": {
-  "dev": "concurrently -k \"vite\" \"tsc -p tsconfig.electron.json --watch\" \"wait-on http://localhost:5173 && electron dist-electron/main.js\"",
-  "build": "tsc -p tsconfig.electron.json && vite build",
-  "start": "electron dist-electron/main.js"
-},
-
+  "scripts": {
+    "dev": "concurrently -k \"vite\" \"tsc -p tsconfig.electron.json --watch\" \"wait-on http://localhost:5173 && electron dist-electron/main.js\"",
+    "build": "tsc -p tsconfig.electron.json && vite build",
+    "start": "electron dist-electron/main.js"
+  },
   "build": {
     "appId": "com.alarm.app",
     "productName": "Despertador",

@@ -7,38 +7,39 @@ export default function App() {
   const [nextFixedAlarm, setNextFixedAlarm] = useState("");
   const [isRinging, setIsRinging] = useState(false);
   const [canStop, setCanStop] = useState(false);
-  const [canClose, setCanClose] = useState(false);
-
-  const audioRef1 = useRef(new Audio("/assets/alarm.wav"));
-  const audioRef2 = useRef(new Audio("/assets/alarm.wav"));
 
   const FIXED_HOURS = [4, 5, 6];
+  const alarmAudioRefs = useRef<HTMLAudioElement[]>([]);
 
-  const triggerAlarm = useCallback(() => {
-    setIsRinging(true);
-    setCanStop(false);
-    setCanClose(false);
-    window.electronAPI?.setAlarmStatus(true);
-  
-    for (let i = 0; i < 3; i++) {
-      const audio = new Audio("/assets/alarm.wav");
-      audio.loop = true;
-      audio.volume = 1;
-      audio.play().catch(() => {});
-    }
-  
-    
-    setTimeout(() => setCanStop(true), 5 * 60 * 1000); // 5 minutos para parar o alarme
-    setTimeout(() => setCanClose(true), 4 * 60 * 1000); // 4 minutos para liberar o botão de fechar
-  }, []);
-  
+const triggerAlarm = useCallback(() => {
+  setIsRinging(true);
+  setCanStop(false);
+  window.electronAPI?.setAlarmStatus(true);
+
+  alarmAudioRefs.current = [];
+
+  for (let i = 0; i < 3; i++) {
+    const audio = new Audio("/assets/alarm.wav");
+    audio.loop = true;
+    audio.volume = 1;
+    audio.play().catch(() => {});
+    alarmAudioRefs.current.push(audio);
+  }
+
+  setTimeout(() => {
+    setCanStop(true); 
+  }, 4 * 60 * 1000);
+}, []);
+
 
   const stopAlarm = () => {
-    [audioRef1.current, audioRef2.current].forEach(audio => {
+    alarmAudioRefs.current.forEach((audio) => {
       audio.pause();
       audio.currentTime = 0;
     });
+    alarmAudioRefs.current = [];
     setIsRinging(false);
+    setCanStop(false);
     window.electronAPI?.setAlarmStatus(false);
   };
 
@@ -108,11 +109,9 @@ export default function App() {
 
   return (
     <div className="alarm-wrapper">
-      {canClose && (
-        <button className="close-button" onClick={() => window.close()}>
-          ❌
-        </button>
-      )}
+      <button className="close-button" onClick={() => window.electronAPI?.forceCloseAll()}>
+        ❌
+      </button>
 
       {alarmTime && (
         <div className="top-clock">
@@ -151,7 +150,7 @@ export default function App() {
               Parar Alarme
             </button>
           ) : (
-            <p className="waiting">Espere 5 minutos para parar o alarme</p>
+            <p className="waiting">Espere 4 minutos para parar o alarme</p>
           )}
         </div>
       )}
