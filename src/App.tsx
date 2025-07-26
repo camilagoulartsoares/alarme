@@ -11,26 +11,22 @@ export default function App() {
   const FIXED_HOURS = [4, 5, 6];
   const alarmAudioRefs = useRef<HTMLAudioElement[]>([]);
 
-const triggerAlarm = useCallback(() => {
-  setIsRinging(true);
-  setCanStop(false);
-  window.electronAPI?.setAlarmStatus(true);
+  const triggerAlarm = useCallback(() => {
+    setIsRinging(true);
+    setCanStop(false);
+    window.electronAPI?.setAlarmStatus(true);
 
-  alarmAudioRefs.current = [];
+    alarmAudioRefs.current = [];
 
-  for (let i = 0; i < 3; i++) {
-    const audio = new Audio("/assets/alarm.wav");
-    audio.loop = true;
-    audio.volume = 1;
-    audio.play().catch(() => {});
-    alarmAudioRefs.current.push(audio);
-  }
-
-  setTimeout(() => {
-    setCanStop(true); 
-  }, 4 * 60 * 1000);
-}, []);
-
+    for (let i = 0; i < 3; i++) {
+      const audio = new Audio("/assets/alarm.wav");
+      audio.loop = true;
+      audio.volume = 1;
+      audio.play().catch(() => { });
+      alarmAudioRefs.current.push(audio);
+    }
+  }, []);
+  ;
 
   const stopAlarm = () => {
     alarmAudioRefs.current.forEach((audio) => {
@@ -107,11 +103,38 @@ const triggerAlarm = useCallback(() => {
     return () => window.removeEventListener("keydown", blockKeys);
   }, [isRinging]);
 
+  useEffect(() => {
+    window.electronAPI?.getAlarmTime()?.then((time) => {
+      if (time) setAlarmTime(time);
+    });
+
+    window.electronAPI?.onSyncAlarmTime?.((time: string) => {
+      setAlarmTime(time);
+    });
+
+    window.electronAPI?.onSyncAlarmStatus?.((status: boolean) => {
+      setIsRinging(status);
+      if (!status) setCanStop(false);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!isRinging) return;
+
+    const timeout = setTimeout(() => {
+      setCanStop(true);
+    }, 4 * 60 * 1000);
+
+    return () => clearTimeout(timeout);
+  }, [isRinging]);
+
   return (
     <div className="alarm-wrapper">
-      <button className="close-button" onClick={() => window.electronAPI?.forceCloseAll()}>
-        ❌
-      </button>
+      {(!isRinging || canStop) && (
+        <button className="close-button" onClick={() => window.electronAPI?.forceCloseAll()}>
+          ❌
+        </button>
+      )}
 
       {alarmTime && (
         <div className="top-clock">
@@ -134,7 +157,13 @@ const triggerAlarm = useCallback(() => {
               value={customTime}
               onChange={(e) => setCustomTime(e.target.value)}
             />
-            <button className="confirm-btn" onClick={() => setAlarmTime(customTime)}>
+            <button
+              className="confirm-btn"
+              onClick={() => {
+                setAlarmTime(customTime);
+                window.electronAPI?.setAlarmTime(customTime);
+              }}
+            >
               Confirmar
             </button>
           </div>

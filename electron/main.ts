@@ -1,8 +1,8 @@
-// electron/main.ts
 import { app, BrowserWindow, ipcMain, screen } from "electron";
 import path from "path";
 
 let alarmIsRinging = false;
+let sharedAlarmTime: string = "";
 let windows: BrowserWindow[] = [];
 
 const createWindows = () => {
@@ -20,7 +20,7 @@ const createWindows = () => {
       webPreferences: {
         preload: path.join(__dirname, "preload.js"),
       },
-      icon: path.join(__dirname, "assets", "alarm-icon.png") 
+      icon: path.join(__dirname, "assets", "alarm-icon.png"),
     });
 
     win.setMenuBarVisibility(false);
@@ -31,12 +31,27 @@ const createWindows = () => {
 
     win.loadURL("http://localhost:5173");
     windows.push(win);
-    icon: path.join(__dirname, "assets", "alarm-icon.png")
   }
 };
 
 ipcMain.on("set-alarm-status", (_, isRinging: boolean) => {
   alarmIsRinging = isRinging;
+  windows.forEach((win) => {
+    win.webContents.send("sync-alarm-status", isRinging);
+  });
+});
+
+
+ipcMain.on("set-alarm-time", (_, time: string) => {
+  sharedAlarmTime = time;
+  windows.forEach((win) => {
+    win.webContents.send("sync-alarm-time", sharedAlarmTime);
+  });
+});
+
+
+ipcMain.handle("get-alarm-time", () => {
+  return sharedAlarmTime;
 });
 
 ipcMain.on("force-close-all", () => {
