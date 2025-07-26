@@ -176,7 +176,7 @@ export default function App() {
           <div className="alarm-label">Alarme Ativo</div>
           {canStop ? (
             <button className="stop" onClick={stopAlarm}>
-              Parar Alarme
+              Parar Alarme 
             </button>
           ) : (
             <p className="waiting">Espere 4 minutos para parar o alarme</p>
