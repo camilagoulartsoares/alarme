@@ -9,5 +9,4 @@ contextBridge.exposeInMainWorld("electronAPI", {
     ipcRenderer.on("sync-alarm-time", (_, time: string) => callback(time)),
   onSyncAlarmStatus: (callback: (status: boolean) => void) =>
     ipcRenderer.on("sync-alarm-status", (_, status: boolean) => callback(status)),
-  
 });
