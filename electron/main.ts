@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, screen } from "electron";
+import { app, BrowserWindow, ipcMain, screen, powerSaveBlocker } from "electron";
 import path from "path";
 
 let alarmIsRinging = false;
@@ -41,14 +41,12 @@ ipcMain.on("set-alarm-status", (_, isRinging: boolean) => {
   });
 });
 
-
 ipcMain.on("set-alarm-time", (_, time: string) => {
   sharedAlarmTime = time;
   windows.forEach((win) => {
     win.webContents.send("sync-alarm-time", sharedAlarmTime);
   });
 });
-
 
 ipcMain.handle("get-alarm-time", () => {
   return sharedAlarmTime;
@@ -60,6 +58,8 @@ ipcMain.on("force-close-all", () => {
 });
 
 app.whenReady().then(() => {
+  powerSaveBlocker.start("prevent-app-suspension");
+
   createWindows();
 
   app.on("activate", () => {
