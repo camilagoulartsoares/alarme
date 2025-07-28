@@ -123,10 +123,11 @@ export default function App() {
 
     const timeout = setTimeout(() => {
       setCanStop(true);
-    }, 4 * 60 * 1000);
+    }, 1 * 60 * 1000 + 20 * 1000); // 1 minuto e 20 segundos
 
     return () => clearTimeout(timeout);
   }, [isRinging]);
+
 
   return (
     <div className="alarm-wrapper">
@@ -176,7 +177,7 @@ export default function App() {
           <div className="alarm-label">Alarme Ativo</div>
           {canStop ? (
             <button className="stop" onClick={stopAlarm}>
-              Parar Alarme 
+              Parar Alarme
             </button>
           ) : (
             <p className="waiting">Espere 4 minutos para parar o alarme</p>
