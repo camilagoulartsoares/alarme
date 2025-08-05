@@ -118,15 +118,16 @@ export default function App() {
     });
   }, []);
 
-  useEffect(() => {
-    if (!isRinging) return;
+useEffect(() => {
+  if (!isRinging) return;
 
-    const timeout = setTimeout(() => {
-      setCanStop(true);
-    }, 1 * 60 * 1000 + 20 * 1000); // 1 minuto e 20 segundos
+  const timeout = setTimeout(() => {
+    setCanStop(true);
+  }, 2 * 60 * 1000); // 2 minutos
 
-    return () => clearTimeout(timeout);
-  }, [isRinging]);
+  return () => clearTimeout(timeout);
+}, [isRinging]);
+
 
 
   return (
@@ -180,7 +181,7 @@ export default function App() {
               Parar Alarme
             </button>
           ) : (
-            <p className="waiting">Espere 4 minutos para parar o alarme</p>
+            <p className="waiting">Espere 2 minutos para parar o alarme</p>
           )}
         </div>
       )}
