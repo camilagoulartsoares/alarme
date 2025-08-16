@@ -19,6 +19,12 @@
       "electron",
       "public"
     ],
+    "extraResources": [
+      {
+        "from": "src/assets",
+        "to": "assets"
+      }
+    ],
     "extraMetadata": {
       "main": "electron/main.js"
     }
