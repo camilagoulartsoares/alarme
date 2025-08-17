@@ -172,6 +172,7 @@ useEffect(() => {
         </div>
       )}
 
+
       {isRinging && (
         <div className="alarm-card">
           <div className="alarm-time">TOCANDO</div>
