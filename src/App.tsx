@@ -8,7 +8,9 @@ export default function App() {
   const [isRinging, setIsRinging] = useState(false);
   const [canStop, setCanStop] = useState(false);
 
-  const FIXED_HOURS = [4, 5, 6];
+  // const FIXED_HOURS = [4, 5, 6]; // versão antiga (desativada)
+  const FIXED_HOURS = [5, 6, 7];
+
   const alarmAudioRefs = useRef<HTMLAudioElement[]>([]);
 
   const triggerAlarm = useCallback(() => {
@@ -22,11 +24,10 @@ export default function App() {
       const audio = new Audio("/assets/alarm.wav");
       audio.loop = true;
       audio.volume = 1;
-      audio.play().catch(() => { });
+      audio.play().catch(() => {});
       alarmAudioRefs.current.push(audio);
     }
   }, []);
-  ;
 
   const stopAlarm = () => {
     alarmAudioRefs.current.forEach((audio) => {
@@ -118,17 +119,15 @@ export default function App() {
     });
   }, []);
 
-useEffect(() => {
-  if (!isRinging) return;
+  useEffect(() => {
+    if (!isRinging) return;
 
-  const timeout = setTimeout(() => {
-    setCanStop(true);
-  }, 2 * 60 * 1000); // 2 minutos
+    const timeout = setTimeout(() => {
+      setCanStop(true);
+    }, 2 * 60 * 1000);
 
-  return () => clearTimeout(timeout);
-}, [isRinging]);
-
-
+    return () => clearTimeout(timeout);
+  }, [isRinging]);
 
   return (
     <div className="alarm-wrapper">
