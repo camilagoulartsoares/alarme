@@ -8,11 +8,13 @@ let sharedAlarmTime: string = "";
 let windows: BrowserWindow[] = [];
 let keyBlockerProc: ChildProcess | null = null;
 
+
 const candidatesAhkExe = [
   "C:\\Program Files\\AutoHotkey\\AutoHotkeyU64.exe",
   "C:\\Program Files\\AutoHotkey\\AutoHotkey.exe",
   "C:\\Program Files (x86)\\AutoHotkey\\AutoHotkey.exe"
 ];
+
 
 const resolveAsset = (p: string) => {
   const devTry = path.join(process.cwd(), "src", "assets", p);
