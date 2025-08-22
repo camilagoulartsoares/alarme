@@ -13,8 +13,6 @@ export default function App() {
 
   const alarmAudioRefs = useRef<HTMLAudioElement[]>([]);
 
-
-  
   const triggerAlarm = useCallback(() => {
     setIsRinging(true);
     setCanStop(false);
