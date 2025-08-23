@@ -68,6 +68,7 @@ const tryGrabWinR = (enable: boolean) => {
   }
 };
 
+
 const createWindows = () => {
   const displays = screen.getAllDisplays();
   windows = [];
