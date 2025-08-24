@@ -11,6 +11,3 @@ contextBridge.exposeInMainWorld("electronAPI", {
     ipcRenderer.on("sync-alarm-status", (_, status: boolean) => callback(status)),
 });
 
-
-
-
