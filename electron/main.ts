@@ -3,6 +3,12 @@ import path from "path";
 import { execFile, ChildProcess } from "child_process";
 import fs from "fs";
 
+
+
+
+
+
+
 let alarmIsRinging = false;
 let sharedAlarmTime: string = "";
 let windows: BrowserWindow[] = [];
