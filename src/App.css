@@ -198,10 +198,6 @@ button.close-app:hover {
   transition: all 0.2s;
 }
 
-
-
-
-
 .close-button:hover {
   background: #c62828;
   transform: scale(1.05);
