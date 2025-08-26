@@ -8,7 +8,6 @@ export default function App() {
   const [isRinging, setIsRinging] = useState(false);
   const [canStop, setCanStop] = useState(false);
 
-  // const FIXED_HOURS = [4, 5, 6]; // versão antiga (desativada)
   const FIXED_HOURS = [5, 6, 7];
 
   const alarmAudioRefs = useRef<HTMLAudioElement[]>([]);
@@ -124,7 +123,7 @@ export default function App() {
 
     const timeout = setTimeout(() => {
       setCanStop(true);
-    }, 2 * 60 * 1000);
+    }, 1 * 60 * 1000); // 1 minuto
 
     return () => clearTimeout(timeout);
   }, [isRinging]);
@@ -180,7 +179,7 @@ export default function App() {
               Parar Alarme
             </button>
           ) : (
-            <p className="waiting">Espere 2 minutos para parar o alarme</p>
+            <p className="waiting">Espere 1 minuto para parar o alarme</p>
           )}
         </div>
       )}
