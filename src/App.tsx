@@ -118,8 +118,6 @@ export default function App() {
     });
   }, []);
 
-  
-
   useEffect(() => {
     if (!isRinging) return;
 
