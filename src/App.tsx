@@ -123,7 +123,7 @@ export default function App() {
 
     const timeout = setTimeout(() => {
       setCanStop(true);
-    }, 1 * 60 * 1000); // 1 minuto
+    }, 1 * 60 * 1000); 
 
     return () => clearTimeout(timeout);
   }, [isRinging]);
