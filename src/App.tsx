@@ -39,6 +39,9 @@ export default function App() {
     window.electronAPI?.setAlarmStatus(false);
   };
 
+
+
+  
   useEffect(() => {
     const updateNextFixedAlarm = () => {
       const now = new Date();
