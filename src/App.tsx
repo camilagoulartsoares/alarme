@@ -1,9 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import "./App.css";
 
-
-
-
 export default function App() {
   const [customTime, setCustomTime] = useState("");
   const [alarmTime, setAlarmTime] = useState("");
