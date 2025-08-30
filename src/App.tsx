@@ -8,7 +8,7 @@ export default function App() {
   const [isRinging, setIsRinging] = useState(false);
   const [canStop, setCanStop] = useState(false);
 
-  const FIXED_HOURS = [6, 7, 7];
+  const FIXED_HOURS = [6, 7, 8];
 
   const alarmAudioRefs = useRef<HTMLAudioElement[]>([]);
 
