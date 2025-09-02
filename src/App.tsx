@@ -10,7 +10,6 @@ export default function App() {
 
   const FIXED_HOURS = [5, 6, 7];
 
-
   const alarmAudioRefs = useRef<HTMLAudioElement[]>([]);
 
   const triggerAlarm = useCallback(() => {
