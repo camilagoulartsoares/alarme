@@ -16,10 +16,6 @@ export default function App() {
     setIsRinging(true);
     setCanStop(false);
     window.electronAPI?.setAlarmStatus(true);
-
-
-
-
     
     alarmAudioRefs.current = [];
 
