@@ -9,7 +9,7 @@ export default function App() {
   const [canStop, setCanStop] = useState(false);
 
   const FIXED_HOURS = [5, 6, 6];
-  
+
   const alarmAudioRefs = useRef<HTMLAudioElement[]>([]);
 
   const triggerAlarm = useCallback(() => {
@@ -19,6 +19,8 @@ export default function App() {
     
     alarmAudioRefs.current = [];
 
+
+    
     for (let i = 0; i < 3; i++) {
       const audio = new Audio("/assets/alarm.wav");
       audio.loop = true;
