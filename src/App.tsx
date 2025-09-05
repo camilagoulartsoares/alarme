@@ -17,6 +17,9 @@ export default function App() {
     setCanStop(false);
     window.electronAPI?.setAlarmStatus(true);
     
+
+
+    
     alarmAudioRefs.current = [];
 
     for (let i = 0; i < 3; i++) {
