@@ -19,6 +19,8 @@ export default function App() {
     
     alarmAudioRefs.current = [];
  
+
+    
     for (let i = 0; i < 3; i++) {
       const audio = new Audio("/assets/alarm.wav");
       audio.loop = true;
