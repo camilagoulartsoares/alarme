@@ -18,9 +18,6 @@ export default function App() {
     window.electronAPI?.setAlarmStatus(true);
     
     alarmAudioRefs.current = [];
-//
-
-
 
     for (let i = 0; i < 3; i++) {
       const audio = new Audio("/assets/alarm.wav");
