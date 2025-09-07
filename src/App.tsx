@@ -28,6 +28,12 @@ export default function App() {
     }
   }, []);
 
+
+
+
+
+
+  
   const stopAlarm = () => {
     alarmAudioRefs.current.forEach((audio) => {
       audio.pause();
