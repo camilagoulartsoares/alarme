@@ -8,15 +8,34 @@ export default function App() {
   const [isRinging, setIsRinging] = useState(false);
   const [canStop, setCanStop] = useState(false);
 
-  const FIXED_HOURS = [5, 6, 6];
+  const FIXED_HOURS = [6, 7,8];
 
   const alarmAudioRefs = useRef<HTMLAudioElement[]>([]);
+  const timersRef = useRef<{ allow?: number; autoStop?: number }>({});
 
+  const clearTimers = () => {
+    if (timersRef.current.allow) clearTimeout(timersRef.current.allow);
+    if (timersRef.current.autoStop) clearTimeout(timersRef.current.autoStop);
+    timersRef.current = {};
+  };
+
+  const stopSoundOnly = () => {
+    alarmAudioRefs.current.forEach((audio) => {
+      audio.pause();
+      audio.currentTime = 0;
+    });
+    alarmAudioRefs.current = [];
+  };
+
+
+
+  
   const triggerAlarm = useCallback(() => {
     setIsRinging(true);
     setCanStop(false);
     window.electronAPI?.setAlarmStatus(true);
-    
+
+    clearTimers();
     alarmAudioRefs.current = [];
 
     for (let i = 0; i < 3; i++) {
@@ -26,14 +45,22 @@ export default function App() {
       audio.play().catch(() => {});
       alarmAudioRefs.current.push(audio);
     }
+
+    const FORTY_SECONDS = 40 * 1000;
+
+    timersRef.current.allow = window.setTimeout(() => {
+      setCanStop(true);
+    }, FORTY_SECONDS);
+
+    timersRef.current.autoStop = window.setTimeout(() => {
+      stopSoundOnly();
+      setCanStop(true);
+    }, FORTY_SECONDS);
   }, []);
 
   const stopAlarm = () => {
-    alarmAudioRefs.current.forEach((audio) => {
-      audio.pause();
-      audio.currentTime = 0;
-    });
-    alarmAudioRefs.current = [];
+    stopSoundOnly();
+    clearTimers();
     setIsRinging(false);
     setCanStop(false);
     window.electronAPI?.setAlarmStatus(false);
@@ -116,17 +143,12 @@ export default function App() {
       setIsRinging(status);
       if (!status) setCanStop(false);
     });
+
+    return () => {
+      clearTimers();
+      stopSoundOnly();
+    };
   }, []);
-
-  useEffect(() => {
-    if (!isRinging) return;
-
-    const timeout = setTimeout(() => {
-      setCanStop(true);
-    }, 1 * 60 * 1000); 
-
-    return () => clearTimeout(timeout);
-  }, [isRinging]);
 
   return (
     <div className="alarm-wrapper">
@@ -179,7 +201,7 @@ export default function App() {
               Parar Alarme
             </button>
           ) : (
-            <p className="waiting">Espere 1 minuto para parar o alarme</p>
+            <p className="waiting">Espere 40 segundos para parar o alarme</p>
           )}
         </div>
       )}
