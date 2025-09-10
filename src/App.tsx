@@ -14,18 +14,6 @@ export default function App() {
   const timersRef = useRef<{ allow?: number; autoStop?: number }>({});
 
 
-
-
-
-
-
-
-
-
-
-
-
-  
   const clearTimers = () => {
     if (timersRef.current.allow) clearTimeout(timersRef.current.allow);
     if (timersRef.current.autoStop) clearTimeout(timersRef.current.autoStop);
