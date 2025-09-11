@@ -20,11 +20,7 @@ export default function App() {
     timersRef.current = {};
   };
 
-  
 
-
-
-  
   const stopSoundOnly = () => {
     alarmAudioRefs.current.forEach((audio) => {
       audio.pause();
