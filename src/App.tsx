@@ -10,12 +10,6 @@ export default function App() {
 
   const FIXED_HOURS = [6, 7,8];
 
-
-
-
-
-
-  
   const alarmAudioRefs = useRef<HTMLAudioElement[]>([]);
   const timersRef = useRef<{ allow?: number; autoStop?: number }>({});
 
