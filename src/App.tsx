@@ -18,12 +18,7 @@ export default function App() {
     if (timersRef.current.autoStop) clearTimeout(timersRef.current.autoStop);
     timersRef.current = {};
   };
-   
-
-
-
-
-  
+     
   const stopSoundOnly = () => {
     alarmAudioRefs.current.forEach((audio) => {
       audio.pause();
