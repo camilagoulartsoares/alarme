@@ -8,7 +8,7 @@ export default function App() {
   const [isRinging, setIsRinging] = useState(false);
   const [canStop, setCanStop] = useState(false);
 
-  const FIXED_HOURS = [6, 7,8];
+  const FIXED_HOURS = [6, 7, 8];
 
   const alarmAudioRefs = useRef<HTMLAudioElement[]>([]);
   const timersRef = useRef<{ allow?: number; autoStop?: number }>({});
@@ -18,17 +18,6 @@ export default function App() {
     if (timersRef.current.autoStop) clearTimeout(timersRef.current.autoStop);
     timersRef.current = {};
   };
-
-
-
-
-
-
-
-  
-
-
-
 
   const stopSoundOnly = () => {
     alarmAudioRefs.current.forEach((audio) => {
@@ -50,7 +39,7 @@ export default function App() {
       const audio = new Audio("/assets/alarm.wav");
       audio.loop = true;
       audio.volume = 1;
-      audio.play().catch(() => {});
+      audio.play().catch(() => { });
       alarmAudioRefs.current.push(audio);
     }
 
