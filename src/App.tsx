@@ -27,6 +27,19 @@ export default function App() {
     alarmAudioRefs.current = [];
   };
 
+
+
+
+
+
+
+
+
+
+
+
+
+  
   const triggerAlarm = useCallback(() => {
     setIsRinging(true);
     setCanStop(false);
