@@ -32,6 +32,12 @@ export default function App() {
 
 
   
+
+
+
+
+
+  
      
   const stopSoundOnly = () => {
     alarmAudioRefs.current.forEach((audio) => {
