@@ -13,6 +13,17 @@ export default function App() {
 
 
 
+  
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -22,6 +33,12 @@ export default function App() {
 
 
   
+
+
+
+
+
+
 
   const alarmAudioRefs = useRef<HTMLAudioElement[]>([]);
   const timersRef = useRef<{ allow?: number; autoStop?: number }>({});
