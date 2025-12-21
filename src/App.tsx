@@ -7,31 +7,6 @@ export default function App() {
   const [nextFixedAlarm, setNextFixedAlarm] = useState("");
   const [isRinging, setIsRinging] = useState(false);
   const [canStop, setCanStop] = useState(false);
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-
-
-
-
-  
-
-
-
-
-
   const FIXED_HOURS = [4, 5,6];
   
   const alarmAudioRefs = useRef<HTMLAudioElement[]>([]);
