@@ -37,6 +37,39 @@ export default function App() {
 
 
 
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -57,6 +90,8 @@ export default function App() {
 
 
   
+
+
   const triggerAlarm = useCallback(() => {
     setIsRinging(true);
     setCanStop(false);
