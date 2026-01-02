@@ -67,25 +67,6 @@ export default function App() {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   const clearTimers = () => {
     if (timersRef.current.allow) clearTimeout(timersRef.current.allow);
     if (timersRef.current.autoStop) clearTimeout(timersRef.current.autoStop);
