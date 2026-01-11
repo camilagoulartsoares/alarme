@@ -78,7 +78,6 @@ body {
   box-shadow: 0 4px 16px rgba(0,0,0,0.3);
   transition: all 0.3s ease;
 }
-
 .confirm-btn:hover {
   transform: translateY(-3px);
   background: linear-gradient(to right, #1565c0, #1e88e5);
