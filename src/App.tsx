@@ -38,7 +38,7 @@ export default function App() {
       const audio = new Audio("/assets/alarm.wav");
       audio.loop = true;
       audio.volume = 1;
-      audio.play().catch(() => { });
+      audio.play().catch(() => {});
       alarmAudioRefs.current.push(audio);
     }
 
@@ -68,7 +68,10 @@ export default function App() {
       const next = new Date();
 
       for (const hour of FIXED_HOURS) {
-        if (now.getHours() < hour || (now.getHours() === hour && now.getMinutes() < 1)) {
+        if (
+          now.getHours() < hour ||
+          (now.getHours() === hour && now.getMinutes() < 1)
+        ) {
           next.setHours(hour);
           next.setMinutes(0);
           setNextFixedAlarm(`${String(hour).padStart(2, "0")}:00`);
@@ -84,7 +87,9 @@ export default function App() {
 
     const interval = setInterval(() => {
       const now = new Date();
-      const currentTime = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+      const currentTime = `${String(now.getHours()).padStart(2, "0")}:${String(
+        now.getMinutes()
+      ).padStart(2, "0")}`;
 
       if (currentTime === alarmTime && !isRinging) {
         triggerAlarm();
@@ -148,8 +153,16 @@ export default function App() {
 
   return (
     <div className="alarm-wrapper">
-      {(!isRinging || canStop) && (
-        <button className="close-button" onClick={() => window.electronAPI?.forceCloseAll()}>
+      {/* ✅ AGORA o botão ❌ aparece quando estiver TOCANDO */}
+      {isRinging && (
+        <button
+          className="close-button"
+          onClick={() => {
+            // (opcional mas recomendado) parar o som antes de fechar
+            stopAlarm();
+            window.electronAPI?.forceCloseAll();
+          }}
+        >
           ❌
         </button>
       )}
@@ -192,6 +205,7 @@ export default function App() {
         <div className="alarm-card">
           <div className="alarm-time">TOCANDO</div>
           <div className="alarm-label">Alarme Ativo</div>
+
           {canStop ? (
             <button className="stop" onClick={stopAlarm}>
               Parar Alarme
@@ -204,8 +218,3 @@ export default function App() {
     </div>
   );
 }
-
-
-
-
-
