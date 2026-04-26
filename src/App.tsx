@@ -7,6 +7,7 @@ export default function App() {
   const [nextFixedAlarm, setNextFixedAlarm] = useState("");
   const [isRinging, setIsRinging] = useState(false);
   const [canStop, setCanStop] = useState(false);
+
   const FIXED_HOURS = [4, 5, 6];
 
   const alarmAudioRefs = useRef<HTMLAudioElement[]>([]);
@@ -24,6 +25,22 @@ export default function App() {
       audio.currentTime = 0;
     });
     alarmAudioRefs.current = [];
+  };
+
+  const stopAlarm = () => {
+    stopSoundOnly();
+    clearTimers();
+    setIsRinging(false);
+    setCanStop(false);
+    window.electronAPI?.setAlarmStatus(false);
+  };
+
+  const closeApp = () => {
+    if (isRinging) {
+      stopAlarm();
+    }
+
+    window.electronAPI?.forceCloseAll();
   };
 
   const triggerAlarm = useCallback(() => {
@@ -54,14 +71,6 @@ export default function App() {
     }, FORTY_SECONDS);
   }, []);
 
-  const stopAlarm = () => {
-    stopSoundOnly();
-    clearTimers();
-    setIsRinging(false);
-    setCanStop(false);
-    window.electronAPI?.setAlarmStatus(false);
-  };
-
   useEffect(() => {
     const updateNextFixedAlarm = () => {
       const now = new Date();
@@ -87,6 +96,7 @@ export default function App() {
 
     const interval = setInterval(() => {
       const now = new Date();
+
       const currentTime = `${String(now.getHours()).padStart(2, "0")}:${String(
         now.getMinutes()
       ).padStart(2, "0")}`;
@@ -115,6 +125,7 @@ export default function App() {
       if (!isRinging) return;
 
       const forbidden = ["F1", "F2", "F3", "F5"];
+
       const isExitKey =
         (e.key === "F4" && e.altKey) ||
         (e.ctrlKey && e.key.toLowerCase() === "c") ||
@@ -142,7 +153,10 @@ export default function App() {
 
     window.electronAPI?.onSyncAlarmStatus?.((status: boolean) => {
       setIsRinging(status);
-      if (!status) setCanStop(false);
+
+      if (!status) {
+        setCanStop(false);
+      }
     });
 
     return () => {
@@ -153,19 +167,10 @@ export default function App() {
 
   return (
     <div className="alarm-wrapper">
-      {/* ✅ AGORA o botão ❌ aparece quando estiver TOCANDO */}
-      {isRinging && (
-        <button
-          className="close-button"
-          onClick={() => {
-            // (opcional mas recomendado) parar o som antes de fechar
-            stopAlarm();
-            window.electronAPI?.forceCloseAll();
-          }}
-        >
-          ❌
-        </button>
-      )}
+      {/* Botão aparece sempre, mesmo antes do alarme despertar */}
+      <button className="close-button" onClick={closeApp}>
+        ❌
+      </button>
 
       {alarmTime && (
         <div className="top-clock">
@@ -188,6 +193,7 @@ export default function App() {
               value={customTime}
               onChange={(e) => setCustomTime(e.target.value)}
             />
+
             <button
               className="confirm-btn"
               onClick={() => {
@@ -215,8 +221,6 @@ export default function App() {
           )}
         </div>
       )}
-
-      
     </div>
   );
 }
