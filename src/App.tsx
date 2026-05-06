@@ -210,7 +210,7 @@ export default function App() {
       {isRinging && (
         <div className="alarm-card">
           <div className="alarm-time">TOCANDO</div>
-          <div className="alarm-label">Alarme Ativo</div>
+      <div className="alarm-label">Alarme Tocando Agora</div>
 
           {canStop ? (
             <button className="stop" onClick={stopAlarm}>
