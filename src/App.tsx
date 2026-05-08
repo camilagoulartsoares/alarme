@@ -218,10 +218,7 @@ export default function App() {
             </button>
           ) : (
             <p className="waiting">Espere 40 segundos para parar o alarme</p>
-          )}
-
-
-          
+          )}   
         </div>
       )}
     </div>
