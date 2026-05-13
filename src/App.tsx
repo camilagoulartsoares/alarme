@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import "./App.css";
+import { startLoudAlarm, stopLoudAlarm } from "./renderer/alarmSound";
 
 export default function App() {
   const [customTime, setCustomTime] = useState("");
@@ -7,90 +8,90 @@ export default function App() {
   const [nextFixedAlarm, setNextFixedAlarm] = useState("");
   const [isRinging, setIsRinging] = useState(false);
   const [canStop, setCanStop] = useState(false);
+  const [isRealAlarm, setIsRealAlarm] = useState(false);
 
   const FIXED_HOURS = [4, 5, 6];
 
-  const alarmAudioRefs = useRef<HTMLAudioElement[]>([]);
-  const timersRef = useRef<{ allow?: number; autoStop?: number }>({});
+  const timersRef = useRef<{
+    allow?: number;
+  }>({});
 
   const clearTimers = () => {
-    if (timersRef.current.allow) clearTimeout(timersRef.current.allow);
-    if (timersRef.current.autoStop) clearTimeout(timersRef.current.autoStop);
+    if (timersRef.current.allow) {
+      clearTimeout(timersRef.current.allow);
+    }
+
     timersRef.current = {};
   };
 
   const stopSoundOnly = () => {
-    alarmAudioRefs.current.forEach((audio) => {
-      audio.pause();
-      audio.currentTime = 0;
-    });
-    alarmAudioRefs.current = [];
+    stopLoudAlarm();
   };
 
   const stopAlarm = () => {
+    if (isRealAlarm && !canStop) {
+      return;
+    }
+
     stopSoundOnly();
     clearTimers();
+
     setIsRinging(false);
     setCanStop(false);
+    setIsRealAlarm(false);
+
     window.electronAPI?.setAlarmStatus(false);
   };
 
   const closeApp = () => {
-    if (isRinging) {
-      stopAlarm();
+    if (isRinging && isRealAlarm && !canStop) {
+      alert("Você só poderá fechar depois de 20 segundos de alarme.");
+      return;
     }
+
+    stopSoundOnly();
+    clearTimers();
 
     window.electronAPI?.forceCloseAll();
   };
 
-  const triggerAlarm = useCallback(() => {
+  const triggerAlarm = useCallback((realAlarm = true) => {
     setIsRinging(true);
-    setCanStop(false);
+    setIsRealAlarm(realAlarm);
+    setCanStop(!realAlarm);
+
     window.electronAPI?.setAlarmStatus(true);
 
     clearTimers();
-    alarmAudioRefs.current = [];
+    startLoudAlarm();
 
-    for (let i = 0; i < 3; i++) {
-      const audio = new Audio("/assets/alarm.wav");
-      audio.loop = true;
-      audio.volume = 1;
-      audio.play().catch(() => {});
-      alarmAudioRefs.current.push(audio);
+    if (realAlarm) {
+      const TWENTY_SECONDS = 20 * 1000;
+
+      timersRef.current.allow = window.setTimeout(() => {
+        setCanStop(true);
+      }, TWENTY_SECONDS);
     }
-
-    const FORTY_SECONDS = 40 * 1000;
-
-    timersRef.current.allow = window.setTimeout(() => {
-      setCanStop(true);
-    }, FORTY_SECONDS);
-
-    timersRef.current.autoStop = window.setTimeout(() => {
-      stopSoundOnly();
-      setCanStop(true);
-    }, FORTY_SECONDS);
   }, []);
+
+  const testAlarm = () => {
+    triggerAlarm(false);
+  };
 
   useEffect(() => {
     const updateNextFixedAlarm = () => {
       const now = new Date();
-      const next = new Date();
 
       for (const hour of FIXED_HOURS) {
         if (
           now.getHours() < hour ||
           (now.getHours() === hour && now.getMinutes() < 1)
         ) {
-          next.setHours(hour);
-          next.setMinutes(0);
           setNextFixedAlarm(`${String(hour).padStart(2, "0")}:00`);
           return;
         }
       }
 
-      next.setDate(next.getDate() + 1);
-      next.setHours(FIXED_HOURS[0]);
-      next.setMinutes(0);
       setNextFixedAlarm(`${String(FIXED_HOURS[0]).padStart(2, "0")}:00`);
     };
 
@@ -102,7 +103,7 @@ export default function App() {
       ).padStart(2, "0")}`;
 
       if (currentTime === alarmTime && !isRinging) {
-        triggerAlarm();
+        triggerAlarm(true);
       }
 
       if (
@@ -111,7 +112,7 @@ export default function App() {
         now.getSeconds() === 0 &&
         !isRinging
       ) {
-        triggerAlarm();
+        triggerAlarm(true);
       }
 
       updateNextFixedAlarm();
@@ -122,25 +123,25 @@ export default function App() {
 
   useEffect(() => {
     const blockKeys = (e: KeyboardEvent) => {
-      if (!isRinging) return;
-
-      const forbidden = ["F1", "F2", "F3", "F5"];
+      if (!isRinging || !isRealAlarm || canStop) return;
 
       const isExitKey =
         (e.key === "F4" && e.altKey) ||
-        (e.ctrlKey && e.key.toLowerCase() === "c") ||
-        forbidden.includes(e.key);
+        (e.ctrlKey && e.key.toLowerCase() === "w") ||
+        (e.ctrlKey && e.key.toLowerCase() === "q") ||
+        e.key === "Escape";
 
       if (isExitKey) {
         e.preventDefault();
         e.stopPropagation();
-        alert("Você não pode sair ou abaixar o volume durante o alarme.");
+        alert("Aguarde 20 segundos antes de fechar ou parar o alarme.");
       }
     };
 
     window.addEventListener("keydown", blockKeys);
+
     return () => window.removeEventListener("keydown", blockKeys);
-  }, [isRinging]);
+  }, [isRinging, isRealAlarm, canStop]);
 
   useEffect(() => {
     window.electronAPI?.getAlarmTime()?.then((time) => {
@@ -156,6 +157,7 @@ export default function App() {
 
       if (!status) {
         setCanStop(false);
+        setIsRealAlarm(false);
       }
     });
 
@@ -167,7 +169,6 @@ export default function App() {
 
   return (
     <div className="alarm-wrapper">
-      {/* Botão aparece sempre, mesmo antes do alarme despertar */}
       <button className="close-button" onClick={closeApp}>
         ❌
       </button>
@@ -197,27 +198,44 @@ export default function App() {
             <button
               className="confirm-btn"
               onClick={() => {
+                if (!customTime) return;
+
                 setAlarmTime(customTime);
                 window.electronAPI?.setAlarmTime(customTime);
               }}
             >
               Confirmar
             </button>
+
+            <button className="confirm-btn" onClick={testAlarm}>
+              Testar Som
+            </button>
           </div>
         </div>
+      )}
+
+      {alarmTime && !isRinging && (
+        <button className="confirm-btn" onClick={testAlarm}>
+          Testar Som
+        </button>
       )}
 
       {isRinging && (
         <div className="alarm-card">
           <div className="alarm-time">TOCANDO</div>
-        <div className="alarm-label">Alarme Tocando Agora</div>
 
-          {canStop ? (
+          <div className="alarm-label">
+            {isRealAlarm ? "Alarme Tocando Agora" : "Teste de Som"}
+          </div>
+
+          {canStop || !isRealAlarm ? (
             <button className="stop" onClick={stopAlarm}>
               Parar Alarme
             </button>
           ) : (
-            <p className="waiting">Espere 40 segundos para parar o alarme</p>
+            <p className="waiting">
+              Espere 20 segundos para parar ou fechar o alarme
+            </p>
           )}
         </div>
       )}
