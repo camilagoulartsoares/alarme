@@ -1,6 +1,7 @@
 let audioCtx: AudioContext | null = null;
 let oscillators: OscillatorNode[] = [];
 let gain: GainNode | null = null;
+let masterGain: GainNode | null = null;
 let intervalId: number | null = null;
 
 export function startLoudAlarm() {
@@ -8,40 +9,101 @@ export function startLoudAlarm() {
 
   audioCtx = new AudioContext();
 
+  // ganho principal absurdo
+  masterGain = audioCtx.createGain();
+  masterGain.gain.value = 5;
+
+  // ganho secundário
   gain = audioCtx.createGain();
-  gain.gain.value = 3.5;
-  gain.connect(audioCtx.destination);
+  gain.gain.value = 4;
 
-  const frequencies = [1200, 1800, 2400, 3200, 4200];
+  // compressor deixa mais "socando"
+  const compressor = audioCtx.createDynamicsCompressor();
 
-  oscillators = frequencies.map((freq, index) => {
-    const osc = audioCtx!.createOscillator();
+  compressor.threshold.value = -10;
+  compressor.knee.value = 40;
+  compressor.ratio.value = 20;
+  compressor.attack.value = 0;
+  compressor.release.value = 0.1;
 
-    osc.type = index % 2 === 0 ? "square" : "sawtooth";
-    osc.frequency.value = freq;
+  gain.connect(compressor);
+  compressor.connect(masterGain);
+  masterGain.connect(audioCtx.destination);
 
-    osc.connect(gain!);
-    osc.start();
+  // frequências extremamente irritantes
+  const frequencies = [
+    900,
+    1400,
+    1900,
+    2400,
+    3200,
+    4100,
+    5200,
+  ];
 
-    return osc;
+  oscillators = [];
+
+  frequencies.forEach((freq, index) => {
+    // primeira onda
+    const osc1 = audioCtx!.createOscillator();
+
+    osc1.type =
+      index % 3 === 0
+        ? "square"
+        : index % 2 === 0
+        ? "sawtooth"
+        : "triangle";
+
+    osc1.frequency.value = freq;
+
+    osc1.connect(gain!);
+
+    osc1.start();
+
+    oscillators.push(osc1);
+
+    // segunda onda desafinada
+    const osc2 = audioCtx!.createOscillator();
+
+    osc2.type = "square";
+
+    osc2.frequency.value = freq * 1.015;
+
+    osc2.connect(gain!);
+
+    osc2.start();
+
+    oscillators.push(osc2);
   });
 
   let high = false;
 
   intervalId = window.setInterval(() => {
-    if (!audioCtx || !gain) return;
+    if (!audioCtx || !gain || !masterGain) return;
 
     high = !high;
 
     oscillators.forEach((osc, index) => {
+      const base =
+        frequencies[index % frequencies.length];
+
       osc.frequency.setValueAtTime(
-        high ? frequencies[index] * 1.65 : frequencies[index],
-        audioCtx!.currentTime
+        high ? base * 1.8 : base,
+        audioCtx.currentTime
       );
     });
 
-    gain.gain.setValueAtTime(high ? 3.5 : 1.4, audioCtx.currentTime);
-  }, 80);
+    // pulsação extremamente agressiva
+    gain.gain.setValueAtTime(
+      high ? 5 : 2.5,
+      audioCtx.currentTime
+    );
+
+    masterGain.gain.setValueAtTime(
+      high ? 6 : 3,
+      audioCtx.currentTime
+    );
+  }, 45);
 }
 
 export function stopLoudAlarm() {
@@ -65,6 +127,14 @@ export function stopLoudAlarm() {
     } catch {}
 
     gain = null;
+  }
+
+  if (masterGain) {
+    try {
+      masterGain.disconnect();
+    } catch {}
+
+    masterGain = null;
   }
 
   if (audioCtx) {
