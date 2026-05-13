@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import "./App.css";
-import { startLoudAlarm, stopLoudAlarm } from "./alarmSound";
-
+import { startLoudAlarm, stopLoudAlarm } from "./renderer/alarmSound";
 export default function App() {
   const [customTime, setCustomTime] = useState("04:00");
   const [alarmTime, setAlarmTime] = useState("");
