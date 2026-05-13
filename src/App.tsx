@@ -6,7 +6,7 @@ export default function App() {
   const [customTime, setCustomTime] = useState("04:00");
   const [alarmTime, setAlarmTime] = useState("");
   const [isRinging, setIsRinging] = useState(false);
-  const [canStop, setCanStop] = useState(false);
+  const [canClose, setCanClose] = useState(false);
   const [isRealAlarm, setIsRealAlarm] = useState(false);
 
   const timersRef = useRef<{ allow?: number }>({});
@@ -20,18 +20,24 @@ export default function App() {
   };
 
   const closeApp = () => {
-    if (isRinging && isRealAlarm && !canStop) {
-      alert("Aguarde 20 segundos antes de fechar o despertador.");
+    if (isRinging && isRealAlarm && !canClose) {
+      alert("Aguarde 6 segundos antes de fechar o despertador.");
       return;
     }
 
     stopLoudAlarm();
     clearTimers();
-    window.electronAPI?.forceCloseAll();
+
+    if (window.electronAPI?.forceCloseAll) {
+      window.electronAPI.forceCloseAll();
+      return;
+    }
+
+    window.close();
   };
 
   const stopAlarm = () => {
-    if (isRealAlarm && !canStop) {
+    if (isRealAlarm && !canClose) {
       return;
     }
 
@@ -39,7 +45,7 @@ export default function App() {
     clearTimers();
 
     setIsRinging(false);
-    setCanStop(false);
+    setCanClose(false);
     setIsRealAlarm(false);
 
     window.electronAPI?.setAlarmStatus(false);
@@ -48,17 +54,18 @@ export default function App() {
   const triggerAlarm = useCallback((realAlarm = true) => {
     setIsRinging(true);
     setIsRealAlarm(realAlarm);
-    setCanStop(!realAlarm);
+    setCanClose(!realAlarm);
 
     startLoudAlarm();
+
     window.electronAPI?.setAlarmStatus(true);
 
     clearTimers();
 
     if (realAlarm) {
       timersRef.current.allow = window.setTimeout(() => {
-        setCanStop(true);
-      }, 20000);
+        setCanClose(true);
+      }, 6000);
     }
   }, []);
 
@@ -70,6 +77,7 @@ export default function App() {
     if (!customTime) return;
 
     setAlarmTime(customTime);
+
     window.electronAPI?.setAlarmTime(customTime);
   };
 
@@ -79,9 +87,9 @@ export default function App() {
 
       const now = new Date();
 
-      const currentTime = `${String(now.getHours()).padStart(2, "0")}:${String(
-        now.getMinutes()
-      ).padStart(2, "0")}`;
+      const currentTime =
+        `${String(now.getHours()).padStart(2, "0")}:` +
+        `${String(now.getMinutes()).padStart(2, "0")}`;
 
       if (currentTime === alarmTime) {
         triggerAlarm(true);
@@ -104,9 +112,13 @@ export default function App() {
     };
   }, []);
 
+  const shouldShowCloseButton =
+    (!alarmTime && !isRinging) ||
+    (isRinging && (!isRealAlarm || canClose));
+
   return (
     <div className="alarm-wrapper">
-      {(!alarmTime || isRinging) && (
+      {shouldShowCloseButton && (
         <button className="close-button" onClick={closeApp}>
           ❌
         </button>
@@ -154,7 +166,7 @@ export default function App() {
             {isRealAlarm ? "Alarme Tocando Agora" : "Teste de Som"}
           </div>
 
-          {canStop || !isRealAlarm ? (
+          {canClose || !isRealAlarm ? (
             <>
               <button className="stop" onClick={stopAlarm}>
                 Parar Alarme
@@ -166,7 +178,7 @@ export default function App() {
             </>
           ) : (
             <p className="waiting">
-              Aguarde 20 segundos para parar ou fechar
+              Aguarde 6 segundos para parar ou fechar
             </p>
           )}
         </div>
