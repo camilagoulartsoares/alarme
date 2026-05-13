@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import "./App.css";
-import { startLoudAlarm, stopLoudAlarm } from "./renderer/alarmSound";
+import { startLoudAlarm, stopLoudAlarm } from "./alarmSound";
 
 export default function App() {
-  const [customTime, setCustomTime] = useState("");
+  const [customTime, setCustomTime] = useState("04:00");
   const [alarmTime, setAlarmTime] = useState("");
   const [nextFixedAlarm, setNextFixedAlarm] = useState("");
   const [isRinging, setIsRinging] = useState(false);
@@ -63,6 +63,7 @@ export default function App() {
     window.electronAPI?.setAlarmStatus(true);
 
     clearTimers();
+
     startLoudAlarm();
 
     if (realAlarm) {
@@ -134,6 +135,7 @@ export default function App() {
       if (isExitKey) {
         e.preventDefault();
         e.stopPropagation();
+
         alert("Aguarde 20 segundos antes de fechar ou parar o alarme.");
       }
     };
@@ -169,9 +171,11 @@ export default function App() {
 
   return (
     <div className="alarm-wrapper">
-      <button className="close-button" onClick={closeApp}>
-        ❌
-      </button>
+      {!alarmTime && !isRinging && (
+        <button className="close-button" onClick={closeApp}>
+          ❌
+        </button>
+      )}
 
       {alarmTime && (
         <div className="top-clock">
@@ -201,6 +205,7 @@ export default function App() {
                 if (!customTime) return;
 
                 setAlarmTime(customTime);
+
                 window.electronAPI?.setAlarmTime(customTime);
               }}
             >
@@ -229,9 +234,15 @@ export default function App() {
           </div>
 
           {canStop || !isRealAlarm ? (
-            <button className="stop" onClick={stopAlarm}>
-              Parar Alarme
-            </button>
+            <>
+              <button className="stop" onClick={stopAlarm}>
+                Parar Alarme
+              </button>
+
+              <button className="confirm-btn" onClick={closeApp}>
+                Fechar Despertador
+              </button>
+            </>
           ) : (
             <p className="waiting">
               Espere 20 segundos para parar ou fechar o alarme
