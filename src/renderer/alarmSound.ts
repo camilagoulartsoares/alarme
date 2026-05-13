@@ -9,70 +9,47 @@ export function startLoudAlarm() {
 
   audioCtx = new AudioContext();
 
-  // ganho principal absurdo
   masterGain = audioCtx.createGain();
-  masterGain.gain.value = 5;
+  masterGain.gain.value = 6;
 
-  // ganho secundário
   gain = audioCtx.createGain();
-  gain.gain.value = 4;
+  gain.gain.value = 5;
 
-  // compressor deixa mais "socando"
   const compressor = audioCtx.createDynamicsCompressor();
-
-  compressor.threshold.value = -10;
-  compressor.knee.value = 40;
+  compressor.threshold.value = -12;
+  compressor.knee.value = 30;
   compressor.ratio.value = 20;
   compressor.attack.value = 0;
-  compressor.release.value = 0.1;
+  compressor.release.value = 0.08;
 
   gain.connect(compressor);
   compressor.connect(masterGain);
   masterGain.connect(audioCtx.destination);
 
-  // frequências extremamente irritantes
   const frequencies = [
-    900,
-    1400,
-    1900,
-    2400,
+    2000,
+    2600,
     3200,
-    4100,
+    3800,
+    4500,
     5200,
   ];
 
   oscillators = [];
 
   frequencies.forEach((freq, index) => {
-    // primeira onda
     const osc1 = audioCtx!.createOscillator();
-
-    osc1.type =
-      index % 3 === 0
-        ? "square"
-        : index % 2 === 0
-        ? "sawtooth"
-        : "triangle";
-
+    osc1.type = index % 2 === 0 ? "square" : "sawtooth";
     osc1.frequency.value = freq;
-
     osc1.connect(gain!);
-
     osc1.start();
-
     oscillators.push(osc1);
 
-    // segunda onda desafinada
     const osc2 = audioCtx!.createOscillator();
-
     osc2.type = "square";
-
-    osc2.frequency.value = freq * 1.015;
-
+    osc2.frequency.value = freq * 1.025;
     osc2.connect(gain!);
-
     osc2.start();
-
     oscillators.push(osc2);
   });
 
@@ -84,26 +61,17 @@ export function startLoudAlarm() {
     high = !high;
 
     oscillators.forEach((osc, index) => {
-      const base =
-        frequencies[index % frequencies.length];
+      const base = frequencies[index % frequencies.length];
 
       osc.frequency.setValueAtTime(
-        high ? base * 1.8 : base,
+        high ? base * 1.45 : base * 0.92,
         audioCtx.currentTime
       );
     });
 
-    // pulsação extremamente agressiva
-    gain.gain.setValueAtTime(
-      high ? 5 : 2.5,
-      audioCtx.currentTime
-    );
-
-    masterGain.gain.setValueAtTime(
-      high ? 6 : 3,
-      audioCtx.currentTime
-    );
-  }, 45);
+    gain.gain.setValueAtTime(high ? 6 : 2.8, audioCtx.currentTime);
+    masterGain.gain.setValueAtTime(high ? 7 : 3.5, audioCtx.currentTime);
+  }, 38);
 }
 
 export function stopLoudAlarm() {
@@ -125,7 +93,6 @@ export function stopLoudAlarm() {
     try {
       gain.disconnect();
     } catch {}
-
     gain = null;
   }
 
@@ -133,7 +100,6 @@ export function stopLoudAlarm() {
     try {
       masterGain.disconnect();
     } catch {}
-
     masterGain = null;
   }
 
