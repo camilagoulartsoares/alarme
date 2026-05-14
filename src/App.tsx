@@ -37,9 +37,7 @@ export default function App() {
   };
 
   const stopAlarm = () => {
-    if (isRealAlarm && !canClose) {
-      return;
-    }
+    if (isRealAlarm && !canClose) return;
 
     stopLoudAlarm();
     clearTimers();
@@ -77,7 +75,6 @@ export default function App() {
     if (!customTime) return;
 
     setAlarmTime(customTime);
-
     window.electronAPI?.setAlarmTime(customTime);
   };
 
@@ -117,16 +114,29 @@ export default function App() {
     (isRinging && (!isRealAlarm || canClose));
 
   return (
-    <div className="alarm-wrapper">
+    <div className={`alarm-wrapper ${isRinging ? "ringing-mode" : ""}`}>
+      <div className="bg-light bg-light-one" />
+      <div className="bg-light bg-light-two" />
+
       {shouldShowCloseButton && (
         <button className="close-button" onClick={closeApp}>
-          ❌
+          ×
         </button>
       )}
 
       {!alarmTime && !isRinging && (
         <div className="picker-overlay">
           <div className="picker-container">
+            <div className="alarm-icon">⏰</div>
+
+            <span className="small-title">Despertador</span>
+
+            <h1>Defina seu alarme</h1>
+
+            <p className="description">
+              Escolha o horário e confirme para deixar o despertador ativo.
+            </p>
+
             <input
               type="time"
               className="picker-input"
@@ -138,7 +148,7 @@ export default function App() {
               Confirmar Alarme
             </button>
 
-            <button className="confirm-btn" onClick={testAlarm}>
+            <button className="secondary-btn" onClick={testAlarm}>
               Testar Som
             </button>
           </div>
@@ -146,36 +156,48 @@ export default function App() {
       )}
 
       {alarmTime && !isRinging && (
-        <>
-          <div className="top-clock">
-            Alarme definido: {alarmTime}
-            <span className="clock-icon">⏰</span>
-          </div>
+        <div className="picker-overlay">
+          <div className="picker-container active-alarm">
+            <div className="alarm-icon active">✓</div>
 
-          <button className="confirm-btn" onClick={testAlarm}>
-            Testar Som
-          </button>
-        </>
+            <span className="small-title">Alarme ativo</span>
+
+            <div className="top-clock">
+              {alarmTime}
+              <span className="clock-icon">⏰</span>
+            </div>
+
+            <p className="description">
+              O despertador irá tocar no horário definido.
+            </p>
+
+            <button className="secondary-btn" onClick={testAlarm}>
+              Testar Som
+            </button>
+          </div>
+        </div>
       )}
 
       {isRinging && (
         <div className="alarm-card">
+          <div className="ring-badge">🔔</div>
+
           <div className="alarm-time">TOCANDO</div>
 
           <div className="alarm-label">
-            {isRealAlarm ? "Alarme Tocando Agora" : "Teste de Som"}
+            {isRealAlarm ? "Alarme tocando agora" : "Teste de som"}
           </div>
 
           {canClose || !isRealAlarm ? (
-            <>
+            <div className="alarm-buttons">
               <button className="stop" onClick={stopAlarm}>
                 Parar Alarme
               </button>
 
-              <button className="confirm-btn" onClick={closeApp}>
+              <button className="close-app" onClick={closeApp}>
                 Fechar Despertador
               </button>
-            </>
+            </div>
           ) : (
             <p className="waiting">
               Aguarde 6 segundos para parar ou fechar

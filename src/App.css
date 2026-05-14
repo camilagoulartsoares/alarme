@@ -1,125 +1,262 @@
+@import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700;800&display=swap");
 
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap');
+* {
+  box-sizing: border-box;
+}
 
 body {
-  font-family: 'Orbitron', sans-serif;
-  background: radial-gradient(circle at center, #0a1f3d, #090e1f);
-  height: 100vh;
+  font-family: "Orbitron", sans-serif;
+  background: #090e1f;
+  min-height: 100vh;
   margin: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   color: white;
+  overflow: hidden;
+}
+
+button,
+input {
+  font-family: inherit;
 }
 
 .alarm-wrapper {
-  text-align: center;
+  width: 100vw;
+  min-height: 100vh;
   position: relative;
-}
-
-
-.top-clock {
-  background: linear-gradient(145deg, #111 0%, #1a1a2e 100%);
-  padding: 1.2rem 2.5rem;
-  border-radius: 1.5rem;
-  font-size: 2.8rem;
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 1rem;
-  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.6);
-  margin-bottom: 1rem;
-  border: 2px solid rgba(255, 255, 255, 0.1);
-  user-select: none;
+  justify-content: center;
+  text-align: center;
+  background:
+    radial-gradient(circle at top left, rgba(66, 165, 245, 0.3), transparent 35%),
+    radial-gradient(circle at bottom right, rgba(126, 87, 194, 0.32), transparent 35%),
+    linear-gradient(135deg, #07111f 0%, #0a1f3d 45%, #090e1f 100%);
+  overflow: hidden;
 }
 
-.clock-icon {
-  font-size: 1.8rem;
+.alarm-wrapper::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 42px 42px;
+  mask-image: radial-gradient(circle at center, black, transparent 75%);
+  pointer-events: none;
+}
+
+.ringing-mode {
+  background:
+    radial-gradient(circle at center, rgba(255, 82, 82, 0.42), transparent 42%),
+    linear-gradient(135deg, #200707 0%, #3f0d0d 50%, #090e1f 100%);
+  animation: emergencyPulse 0.85s infinite alternate;
+}
+
+.bg-light {
+  position: absolute;
+  width: 320px;
+  height: 320px;
+  border-radius: 999px;
+  filter: blur(60px);
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.bg-light-one {
+  top: -90px;
+  left: -90px;
+  background: #42a5f5;
+}
+
+.bg-light-two {
+  right: -100px;
+  bottom: -100px;
+  background: #7e57c2;
 }
 
 .picker-overlay {
-  background: #1e1e2f;
-  padding: 2rem 3rem;
-  border-radius: 1rem;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+  position: relative;
+  z-index: 2;
+  width: min(92vw, 520px);
+  padding: 2.3rem;
+  border-radius: 2rem;
+  background: rgba(14, 22, 43, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow:
+    0 28px 80px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(20px);
   animation: fadeIn 0.5s ease-in-out;
 }
 
 .picker-container {
-  max-width: 480px;
   width: 100%;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1.1rem;
 }
 
+.alarm-icon,
+.ring-badge {
+  width: 76px;
+  height: 76px;
+  margin: 0 auto 0.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1.4rem;
+  font-size: 2.3rem;
+  background: linear-gradient(145deg, rgba(66, 165, 245, 0.28), rgba(25, 118, 210, 0.14));
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.35);
+}
+
+.alarm-icon.active {
+  color: #8cffb0;
+}
+
+.small-title {
+  color: #90caf9;
+  font-size: 0.82rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.22rem;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(2rem, 7vw, 3.1rem);
+  line-height: 1.05;
+  color: #ffffff;
+  text-shadow: 0 0 24px rgba(66, 165, 245, 0.25);
+}
+
+.description {
+  margin: 0 0 0.4rem;
+  font-family: Arial, sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #c8d8ef;
+}
+
+.top-clock {
+  background: linear-gradient(145deg, #08111f 0%, #151f38 100%);
+  padding: 1.1rem 1.8rem;
+  border-radius: 1.4rem;
+  font-size: clamp(2.6rem, 10vw, 4.2rem);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  box-shadow:
+    0 16px 36px rgba(0, 0, 0, 0.55),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.09);
+  border: 1px solid rgba(144, 202, 249, 0.2);
+  user-select: none;
+  color: #e3f2fd;
+  text-shadow: 0 0 22px rgba(66, 165, 245, 0.45);
+}
+
+.clock-icon {
+  font-size: 2rem;
+}
 
 .picker-input {
   width: 100%;
   box-sizing: border-box;
-  font-size: 2.5rem;
-  padding: 1rem 1.5rem;
-  border-radius: 1rem;
-  background: #111;
-  border: 2px solid #333;
+  font-size: clamp(2.3rem, 9vw, 3.4rem);
+  padding: 1rem 1.3rem;
+  border-radius: 1.2rem;
+  background: rgba(5, 11, 22, 0.96);
+  border: 1px solid rgba(144, 202, 249, 0.25);
   color: #fff;
-  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.5);
-  width: 100%;
+  box-shadow:
+    inset 0 0 18px rgba(0, 0, 0, 0.65),
+    0 0 28px rgba(66, 165, 245, 0.13);
   text-align: center;
+  outline: none;
+  transition: 0.25s ease;
 }
 
+.picker-input:focus {
+  border-color: #42a5f5;
+  box-shadow:
+    inset 0 0 18px rgba(0, 0, 0, 0.65),
+    0 0 0 4px rgba(66, 165, 245, 0.14),
+    0 0 32px rgba(66, 165, 245, 0.28);
+}
 
-
-
-.confirm-btn {
-  background: linear-gradient(to right, #1976d2, #42a5f5);
+.confirm-btn,
+.secondary-btn {
   color: white;
   padding: 1rem 2rem;
-  font-size: 1.1rem;
+  font-size: 1rem;
   border: none;
-  border-radius: 10px;
-  font-weight: bold;
+  border-radius: 1rem;
+  font-weight: 800;
   cursor: pointer;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
-  transition: all 0.3s ease;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.32);
+  transition: all 0.25s ease;
 }
-.confirm-btn:hover {
+
+.confirm-btn {
+  background: linear-gradient(135deg, #1565c0, #42a5f5);
+}
+
+.secondary-btn {
+  background: rgba(255, 255, 255, 0.09);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.confirm-btn:hover,
+.secondary-btn:hover {
   transform: translateY(-3px);
-  background: linear-gradient(to right, #1565c0, #1e88e5);
+}
+
+.confirm-btn:hover {
+  background: linear-gradient(135deg, #0d47a1, #1e88e5);
+  box-shadow: 0 14px 30px rgba(30, 136, 229, 0.3);
+}
+
+.secondary-btn:hover {
+  background: rgba(255, 255, 255, 0.14);
 }
 
 .alarm-card {
-  margin-top: 2rem;
-  background: rgba(255, 255, 255, 0.07);
-  border-radius: 1rem;
-  padding: 2rem;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-  animation: slideUp 0.4s ease;
+  position: relative;
+  z-index: 2;
+  width: min(92vw, 540px);
+  background: rgba(70, 8, 8, 0.72);
+  border-radius: 2rem;
+  padding: 2.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow:
+    0 28px 90px rgba(0, 0, 0, 0.58),
+    0 0 60px rgba(255, 82, 82, 0.25);
+  backdrop-filter: blur(20px);
+  animation: slideUp 0.4s ease, alarmShake 0.55s infinite;
+}
+
+.ring-badge {
+  background: linear-gradient(145deg, rgba(255, 82, 82, 0.35), rgba(255, 255, 255, 0.1));
+  animation: ringBell 0.7s infinite;
 }
 
 .alarm-time {
-  font-size: 4rem;
-  font-weight: bold;
+  font-size: clamp(3rem, 12vw, 5rem);
+  font-weight: 800;
   color: #ff5252;
   animation: pulse 1s infinite;
-  font-family: 'Orbitron', sans-serif;
-}
-
-@keyframes pulse {
-  0% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.05); opacity: 0.7; }
-  100% { transform: scale(1); opacity: 1; }
-}
-
-.am-pm {
-  font-size: 1.5rem;
-  opacity: 0.6;
+  text-shadow:
+    0 0 18px rgba(255, 82, 82, 0.45),
+    0 0 44px rgba(255, 82, 82, 0.22);
 }
 
 .alarm-label {
-  margin-top: 0.5rem;
-  font-size: 1.2rem;
-  color: #ccc;
+  margin-top: 0.6rem;
+  font-size: 1.15rem;
+  color: #ffdada;
 }
 
 .alarm-buttons {
@@ -127,79 +264,72 @@ body {
   display: flex;
   justify-content: center;
   gap: 1rem;
+  flex-wrap: wrap;
 }
 
 button.stop {
-  background: #e53935;
+  background: linear-gradient(135deg, #e53935, #b71c1c);
 }
+
 button.repeat {
   background: #3f51b5;
 }
-button.stop, button.repeat {
+
+button.stop,
+button.repeat,
+button.close-app {
   color: white;
   font-size: 1rem;
-  padding: 0.8rem 1.5rem;
+  padding: 0.9rem 1.5rem;
   border: none;
-  border-radius: 8px;
-  font-weight: bold;
+  border-radius: 1rem;
+  font-weight: 800;
   cursor: pointer;
   transition: all 0.2s;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.34);
 }
+
 button.stop:hover,
-button.repeat:hover {
+button.repeat:hover,
+button.close-app:hover {
   transform: translateY(-2px);
+}
+
+button.close-app {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+button.close-app:hover {
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .waiting {
   margin-top: 1.5rem;
-  color: #ff9e9e;
+  color: #ffcaca;
   font-size: 1rem;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
-}
-
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(30px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-button.close-app {
-  background: #444;
-  color: white;
-  font-size: 1rem;
-  padding: 0.8rem 1.5rem;
-  border: none;
-  border-radius: 8px;
-  font-weight: bold;
-  margin-top: 1rem;
-  cursor: pointer;
-  transition: all 0.2s;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-}
-
-button.close-app:hover {
-  background: #222;
-  transform: translateY(-2px);
+  font-family: Arial, sans-serif;
+  padding: 0.9rem 1rem;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.09);
 }
 
 .close-button {
   position: fixed;
   top: 1rem;
   right: 1rem;
-  font-size: 1.2rem;
-  padding: 0.5rem 1rem;
-  background: #e53935;
+  width: 46px;
+  height: 46px;
+  font-size: 1.8rem;
+  line-height: 1;
+  background: rgba(229, 57, 53, 0.92);
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 1rem;
   cursor: pointer;
   font-weight: bold;
   z-index: 9999;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.42);
   transition: all 0.2s;
 }
 
@@ -208,5 +338,96 @@ button.close-app:hover {
   transform: scale(1.05);
 }
 
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
 
+  50% {
+    transform: scale(1.05);
+    opacity: 0.78;
+  }
 
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes alarmShake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(-4px);
+  }
+
+  75% {
+    transform: translateX(4px);
+  }
+}
+
+@keyframes ringBell {
+  0%,
+  100% {
+    transform: rotate(-9deg);
+  }
+
+  50% {
+    transform: rotate(9deg);
+  }
+}
+
+@keyframes emergencyPulse {
+  from {
+    filter: brightness(1);
+  }
+
+  to {
+    filter: brightness(1.25);
+  }
+}
+
+@media (max-width: 520px) {
+  .picker-overlay,
+  .alarm-card {
+    padding: 1.5rem;
+    border-radius: 1.5rem;
+  }
+
+  .alarm-buttons {
+    flex-direction: column;
+  }
+
+  button.stop,
+  button.close-app {
+    width: 100%;
+  }
+}
