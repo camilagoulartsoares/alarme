@@ -10,29 +10,31 @@ export function startLoudAlarm() {
   audioCtx = new AudioContext();
 
   masterGain = audioCtx.createGain();
-  masterGain.gain.value = 6;
+  masterGain.gain.value = 10;
 
   gain = audioCtx.createGain();
-  gain.gain.value = 5;
+  gain.gain.value = 8;
 
   const compressor = audioCtx.createDynamicsCompressor();
-  compressor.threshold.value = -12;
-  compressor.knee.value = 30;
-  compressor.ratio.value = 20;
+  compressor.threshold.value = -18;
+  compressor.knee.value = 10;
+  compressor.ratio.value = 30;
   compressor.attack.value = 0;
-  compressor.release.value = 0.08;
+  compressor.release.value = 0.03;
 
   gain.connect(compressor);
   compressor.connect(masterGain);
   masterGain.connect(audioCtx.destination);
 
   const frequencies = [
-    2000,
-    2600,
-    3200,
-    3800,
-    4500,
-    5200,
+    880,
+    1200,
+    1800,
+    2400,
+    3100,
+    3900,
+    4700,
+    5600,
   ];
 
   oscillators = [];
@@ -47,31 +49,51 @@ export function startLoudAlarm() {
 
     const osc2 = audioCtx!.createOscillator();
     osc2.type = "square";
-    osc2.frequency.value = freq * 1.025;
+    osc2.frequency.value = freq * 1.07;
     osc2.connect(gain!);
     osc2.start();
     oscillators.push(osc2);
+
+    const osc3 = audioCtx!.createOscillator();
+    osc3.type = "triangle";
+    osc3.frequency.value = freq * 0.54;
+    osc3.connect(gain!);
+    osc3.start();
+    oscillators.push(osc3);
   });
 
-  let high = false;
+  let step = 0;
 
   intervalId = window.setInterval(() => {
     if (!audioCtx || !gain || !masterGain) return;
 
-    high = !high;
+    step++;
 
     oscillators.forEach((osc, index) => {
       const base = frequencies[index % frequencies.length];
 
+      const pattern = step % 4;
+
+      const multiplier =
+        pattern === 0
+          ? 0.72
+          : pattern === 1
+          ? 1.45
+          : pattern === 2
+          ? 2.1
+          : 0.95;
+
       osc.frequency.setValueAtTime(
-        high ? base * 1.45 : base * 0.92,
+        base * multiplier,
         audioCtx.currentTime
       );
     });
 
-    gain.gain.setValueAtTime(high ? 6 : 2.8, audioCtx.currentTime);
-    masterGain.gain.setValueAtTime(high ? 7 : 3.5, audioCtx.currentTime);
-  }, 38);
+    const pulse = step % 2 === 0;
+
+    gain.gain.setValueAtTime(pulse ? 9 : 4.5, audioCtx.currentTime);
+    masterGain.gain.setValueAtTime(pulse ? 12 : 6, audioCtx.currentTime);
+  }, 45);
 }
 
 export function stopLoudAlarm() {

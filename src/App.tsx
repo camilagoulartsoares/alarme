@@ -7,74 +7,67 @@ export default function App() {
   const [alarmTime, setAlarmTime] = useState("");
   const [isRinging, setIsRinging] = useState(false);
   const [canClose, setCanClose] = useState(false);
-  const [isRealAlarm, setIsRealAlarm] = useState(false);
 
-  const timersRef = useRef<{ allow?: number }>({});
+  const timerRef = useRef<number | null>(null);
 
-  const clearTimers = () => {
-    if (timersRef.current.allow) {
-      clearTimeout(timersRef.current.allow);
+  const clearCloseTimer = () => {
+    if (timerRef.current !== null) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
     }
-
-    timersRef.current = {};
   };
 
   const closeApp = () => {
-    if (isRinging && isRealAlarm && !canClose) {
-      alert("Aguarde 6 segundos antes de fechar o despertador.");
-      return;
-    }
+    if (alarmTime && !canClose) return;
 
     stopLoudAlarm();
-    clearTimers();
+    clearCloseTimer();
 
-    if (window.electronAPI?.forceCloseAll) {
-      window.electronAPI.forceCloseAll();
-      return;
-    }
-
-    window.close();
+    window.electronAPI?.setAlarmStatus(false);
+    window.electronAPI?.forceCloseAll?.();
   };
 
   const stopAlarm = () => {
-    if (isRealAlarm && !canClose) return;
+    if (!canClose) return;
 
     stopLoudAlarm();
-    clearTimers();
+    clearCloseTimer();
 
     setIsRinging(false);
     setCanClose(false);
-    setIsRealAlarm(false);
+    setAlarmTime("");
 
     window.electronAPI?.setAlarmStatus(false);
+    window.electronAPI?.setAlarmTime("");
   };
 
-  const triggerAlarm = useCallback((realAlarm = true) => {
+  const triggerAlarm = useCallback(() => {
     setIsRinging(true);
-    setIsRealAlarm(realAlarm);
-    setCanClose(!realAlarm);
-
-    startLoudAlarm();
+    setCanClose(false);
 
     window.electronAPI?.setAlarmStatus(true);
 
-    clearTimers();
+    startLoudAlarm();
 
-    if (realAlarm) {
-      timersRef.current.allow = window.setTimeout(() => {
-        setCanClose(true);
-      }, 6000);
-    }
+    clearCloseTimer();
+
+    timerRef.current = window.setTimeout(() => {
+      setCanClose(true);
+
+      // libera fechar depois de 10 segundos
+      window.electronAPI?.setAlarmStatus(false);
+    }, 10000);
   }, []);
-
-  const testAlarm = () => {
-    triggerAlarm(false);
-  };
 
   const confirmAlarm = () => {
     if (!customTime) return;
 
     setAlarmTime(customTime);
+    setCanClose(false);
+
+    // bloqueia fechar imediatamente ao definir horário
+    window.electronAPI?.setAlarmStatus(true);
+
     window.electronAPI?.setAlarmTime(customTime);
   };
 
@@ -89,7 +82,7 @@ export default function App() {
         `${String(now.getMinutes()).padStart(2, "0")}`;
 
       if (currentTime === alarmTime) {
-        triggerAlarm(true);
+        triggerAlarm();
       }
     }, 1000);
 
@@ -100,25 +93,26 @@ export default function App() {
     window.electronAPI?.getAlarmTime?.().then((time) => {
       if (time) {
         setAlarmTime(time);
+
+        // se já existe alarme salvo, mantém bloqueado
+        window.electronAPI?.setAlarmStatus(true);
       }
     });
 
     return () => {
       stopLoudAlarm();
-      clearTimers();
+      clearCloseTimer();
     };
   }, []);
 
-  const shouldShowCloseButton =
-    (!alarmTime && !isRinging) ||
-    (isRinging && (!isRealAlarm || canClose));
+  // botão X só aparece:
+  // - quando não há alarme definido
+  // - OU depois dos 10 segundos
+  const showCloseButton = !alarmTime || canClose;
 
   return (
     <div className={`alarm-wrapper ${isRinging ? "ringing-mode" : ""}`}>
-      <div className="bg-light bg-light-one" />
-      <div className="bg-light bg-light-two" />
-
-      {shouldShowCloseButton && (
+      {showCloseButton && (
         <button className="close-button" onClick={closeApp}>
           ×
         </button>
@@ -147,10 +141,6 @@ export default function App() {
             <button className="confirm-btn" onClick={confirmAlarm}>
               Confirmar Alarme
             </button>
-
-            <button className="secondary-btn" onClick={testAlarm}>
-              Testar Som
-            </button>
           </div>
         </div>
       )}
@@ -162,18 +152,12 @@ export default function App() {
 
             <span className="small-title">Alarme ativo</span>
 
-            <div className="top-clock">
-              {alarmTime}
-              <span className="clock-icon">⏰</span>
-            </div>
+            <div className="top-clock">{alarmTime} ⏰</div>
 
             <p className="description">
-              O despertador irá tocar no horário definido.
+              O botão de fechar ficará bloqueado até o alarme tocar por 10
+              segundos.
             </p>
-
-            <button className="secondary-btn" onClick={testAlarm}>
-              Testar Som
-            </button>
           </div>
         </div>
       )}
@@ -184,11 +168,11 @@ export default function App() {
 
           <div className="alarm-time">TOCANDO</div>
 
-          <div className="alarm-label">
-            {isRealAlarm ? "Alarme tocando agora" : "Teste de som"}
-          </div>
-
-          {canClose || !isRealAlarm ? (
+          {!canClose ? (
+            <p className="waiting">
+              Aguarde 10 segundos para parar ou fechar.
+            </p>
+          ) : (
             <div className="alarm-buttons">
               <button className="stop" onClick={stopAlarm}>
                 Parar Alarme
@@ -198,11 +182,6 @@ export default function App() {
                 Fechar Despertador
               </button>
             </div>
-          ) : (
-            <p className="waiting">
-              Aguarde 6 segundos para parar ou fechar
-              
-            </p>
           )}
         </div>
       )}
