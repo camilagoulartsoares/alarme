@@ -201,6 +201,7 @@ export default function App() {
           ) : (
             <p className="waiting">
               Aguarde 6 segundos para parar ou fechar
+              
             </p>
           )}
         </div>
