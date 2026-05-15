@@ -3,8 +3,10 @@ import "./App.css";
 import { startLoudAlarm, stopLoudAlarm } from "./renderer/alarmSound";
 
 export default function App() {
-  const [customTime, setCustomTime] = useState("04:00");
-  const [alarmTime, setAlarmTime] = useState("");
+  // horário fixo
+  const FIXED_ALARM_TIME = "04:00";
+
+  const [alarmTime, setAlarmTime] = useState(FIXED_ALARM_TIME);
   const [isRinging, setIsRinging] = useState(false);
   const [canClose, setCanClose] = useState(false);
 
@@ -35,10 +37,12 @@ export default function App() {
 
     setIsRinging(false);
     setCanClose(false);
-    setAlarmTime("");
 
-    window.electronAPI?.setAlarmStatus(false);
-    window.electronAPI?.setAlarmTime("");
+    // mantém ativo para o próximo dia
+    setAlarmTime(FIXED_ALARM_TIME);
+
+    window.electronAPI?.setAlarmStatus(true);
+    window.electronAPI?.setAlarmTime(FIXED_ALARM_TIME);
   };
 
   const triggerAlarm = useCallback(() => {
@@ -59,19 +63,13 @@ export default function App() {
     }, 10000);
   }, []);
 
-  const confirmAlarm = () => {
-    if (!customTime) return;
+  useEffect(() => {
+    // salva automaticamente o horário fixo
+    setAlarmTime(FIXED_ALARM_TIME);
 
-    setAlarmTime(customTime);
-    setCanClose(false);
-
-    // bloqueia fechar imediatamente ao definir horário
+    window.electronAPI?.setAlarmTime(FIXED_ALARM_TIME);
     window.electronAPI?.setAlarmStatus(true);
 
-    window.electronAPI?.setAlarmTime(customTime);
-  };
-
-  useEffect(() => {
     const interval = setInterval(() => {
       if (!alarmTime || isRinging) return;
 
@@ -90,25 +88,14 @@ export default function App() {
   }, [alarmTime, isRinging, triggerAlarm]);
 
   useEffect(() => {
-    window.electronAPI?.getAlarmTime?.().then((time) => {
-      if (time) {
-        setAlarmTime(time);
-
-        // se já existe alarme salvo, mantém bloqueado
-        window.electronAPI?.setAlarmStatus(true);
-      }
-    });
-
     return () => {
       stopLoudAlarm();
       clearCloseTimer();
     };
   }, []);
 
-  // botão X só aparece:
-  // - quando não há alarme definido
-  // - OU depois dos 10 segundos
-  const showCloseButton = !alarmTime || canClose;
+  // botão X só aparece depois dos 10 segundos
+  const showCloseButton = canClose;
 
   return (
     <div className={`alarm-wrapper ${isRinging ? "ringing-mode" : ""}`}>
@@ -118,45 +105,19 @@ export default function App() {
         </button>
       )}
 
-      {!alarmTime && !isRinging && (
+      {!isRinging && (
         <div className="picker-overlay">
-          <div className="picker-container">
-            <div className="alarm-icon">⏰</div>
+          <div className="picker-container active-alarm">
+            <div className="alarm-icon active">⏰</div>
 
             <span className="small-title">Despertador</span>
 
-            <h1>Defina seu alarme</h1>
-
-            <p className="description">
-              Escolha o horário e confirme para deixar o despertador ativo.
-            </p>
-
-            <input
-              type="time"
-              className="picker-input"
-              value={customTime}
-              onChange={(e) => setCustomTime(e.target.value)}
-            />
-
-            <button className="confirm-btn" onClick={confirmAlarm}>
-              Confirmar Alarme
-            </button>
-          </div>
-        </div>
-      )}
-
-      {alarmTime && !isRinging && (
-        <div className="picker-overlay">
-          <div className="picker-container active-alarm">
-            <div className="alarm-icon active">✓</div>
-
-            <span className="small-title">Alarme ativo</span>
+            <h1>Alarme definido</h1>
 
             <div className="top-clock">{alarmTime} ⏰</div>
 
             <p className="description">
-              O botão de fechar ficará bloqueado até o alarme tocar por 10
-              segundos.
+              O despertador tocará automaticamente todos os dias às 04:00.
             </p>
           </div>
         </div>
