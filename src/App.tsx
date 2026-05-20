@@ -179,12 +179,14 @@ export default function App() {
               </button>
 
               <button className="close-app" onClick={closeApp}>
-                Fechar Despertador
+                Fechar Despertador.
               </button>
             </div>
           )}
         </div>
       )}
+
+
     </div>
   );
 }
