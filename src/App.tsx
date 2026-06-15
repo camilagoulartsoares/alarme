@@ -112,7 +112,7 @@ export default function App() {
 
             <span className="small-title">Despertador</span>
 
-            <h1>Alarme definido</h1>
+            <h1>Alarme diário definido</h1>
 
             <div className="top-clock">{alarmTime} ⏰</div>
 
@@ -146,8 +146,6 @@ export default function App() {
           )}
         </div>
       )}
-
-
     </div>
   );
 }
