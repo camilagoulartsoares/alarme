@@ -94,7 +94,7 @@ export default function App() {
     };
   }, []);
 
-  //   botão X só aparece depois dos 10 segundos
+  // botão X só aparece depois dos 10 segundos
   const showCloseButton = canClose;
 
   return (
