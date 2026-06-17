@@ -3,8 +3,8 @@ import "./App.css";
 import { startLoudAlarm, stopLoudAlarm } from "./renderer/alarmSound";
 
 export default function App() {
-  // horário fixo
   const FIXED_ALARM_TIME = "04:00";
+  const UNLOCK_DELAY_MS = 10000;
 
   const [alarmTime, setAlarmTime] = useState(FIXED_ALARM_TIME);
   const [isRinging, setIsRinging] = useState(false);
@@ -37,8 +37,6 @@ export default function App() {
 
     setIsRinging(false);
     setCanClose(false);
-
-    // mantém ativo para o próximo dia
     setAlarmTime(FIXED_ALARM_TIME);
 
     window.electronAPI?.setAlarmStatus(true);
@@ -57,14 +55,11 @@ export default function App() {
 
     timerRef.current = window.setTimeout(() => {
       setCanClose(true);
-
-      // libera fechar depois de 10 segundos
       window.electronAPI?.setAlarmStatus(false);
-    }, 10000);
+    }, UNLOCK_DELAY_MS);
   }, []);
 
   useEffect(() => {
-    // salva automaticamente o horário fixo
     setAlarmTime(FIXED_ALARM_TIME);
 
     window.electronAPI?.setAlarmTime(FIXED_ALARM_TIME);
@@ -94,7 +89,6 @@ export default function App() {
     };
   }, []);
 
-  // botão X só aparece depois dos 10 segundos
   const showCloseButton = canClose;
 
   return (
@@ -130,9 +124,7 @@ export default function App() {
           <div className="alarm-time">TOCANDO</div>
 
           {!canClose ? (
-            <p className="waiting">
-              Aguarde 10 segundos para parar ou fechar.
-            </p>
+            <p className="waiting">Aguarde 10 segundos para parar ou fechar.</p>
           ) : (
             <div className="alarm-buttons">
               <button className="stop" onClick={stopAlarm}>
