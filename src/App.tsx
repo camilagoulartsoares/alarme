@@ -3,14 +3,15 @@ import "./App.css";
 import { startLoudAlarm, stopLoudAlarm } from "./renderer/alarmSound";
 
 export default function App() {
-  const FIXED_ALARM_TIME = "04:00";
+  const DEFAULT_ALARM_TIME = "04:00";
   const UNLOCK_DELAY_MS = 10000;
 
-  const [alarmTime, setAlarmTime] = useState(FIXED_ALARM_TIME);
+  const [alarmTime, setAlarmTime] = useState(DEFAULT_ALARM_TIME);
   const [isRinging, setIsRinging] = useState(false);
-  const [canClose, setCanClose] = useState(false);
+  const [canClose, setCanClose] = useState(true);
 
   const timerRef = useRef<number | null>(null);
+  const lastTriggeredRef = useRef<string | null>(null);
 
   const clearCloseTimer = () => {
     if (timerRef.current !== null) {
@@ -20,7 +21,7 @@ export default function App() {
   };
 
   const closeApp = () => {
-    if (alarmTime && !canClose) return;
+    if (isRinging && !canClose) return;
 
     stopLoudAlarm();
     clearCloseTimer();
@@ -36,11 +37,10 @@ export default function App() {
     clearCloseTimer();
 
     setIsRinging(false);
-    setCanClose(false);
-    setAlarmTime(FIXED_ALARM_TIME);
+    setCanClose(true);
 
     window.electronAPI?.setAlarmStatus(true);
-    window.electronAPI?.setAlarmTime(FIXED_ALARM_TIME);
+    window.electronAPI?.setAlarmTime(alarmTime);
   };
 
   const triggerAlarm = useCallback(() => {
@@ -60,12 +60,10 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    setAlarmTime(FIXED_ALARM_TIME);
-
-    window.electronAPI?.setAlarmTime(FIXED_ALARM_TIME);
+    window.electronAPI?.setAlarmTime(alarmTime);
     window.electronAPI?.setAlarmStatus(true);
 
-    const interval = setInterval(() => {
+    const interval = window.setInterval(() => {
       if (!alarmTime || isRinging) return;
 
       const now = new Date();
@@ -74,7 +72,11 @@ export default function App() {
         `${String(now.getHours()).padStart(2, "0")}:` +
         `${String(now.getMinutes()).padStart(2, "0")}`;
 
-      if (currentTime === alarmTime) {
+      const currentDate = now.toDateString();
+      const triggerKey = `${currentDate}-${currentTime}`;
+
+      if (currentTime === alarmTime && lastTriggeredRef.current !== triggerKey) {
+        lastTriggeredRef.current = triggerKey;
         triggerAlarm();
       }
     }, 1000);
@@ -89,15 +91,11 @@ export default function App() {
     };
   }, []);
 
-  const showCloseButton = canClose;
-
   return (
     <div className={`alarm-wrapper ${isRinging ? "ringing-mode" : ""}`}>
-      {showCloseButton && (
-        <button className="close-button" onClick={closeApp}>
-          ×
-        </button>
-      )}
+      <button className="close-button" onClick={closeApp}>
+        ×
+      </button>
 
       {!isRinging && (
         <div className="picker-overlay">
@@ -111,7 +109,21 @@ export default function App() {
             <div className="top-clock">{alarmTime} ⏰</div>
 
             <p className="description">
-              O despertador tocará automaticamente todos os dias às 04:00.
+              Escolha um horário para testar ou deixe às 04:00.
+            </p>
+
+            <input
+              type="time"
+              value={alarmTime}
+              onChange={(e) => setAlarmTime(e.target.value)}
+            />
+
+            <button type="button" onClick={triggerAlarm}>
+              Testar alarme agora
+            </button>
+
+            <p className="description">
+              O despertador tocará automaticamente todos os dias no horário escolhido.
             </p>
           </div>
         </div>
