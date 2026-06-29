@@ -10,6 +10,11 @@ import path from "path";
 import { execFile, ChildProcess } from "child_process";
 import fs from "fs";
 
+// Permite tocar som sem clique do usuário (necessário para alarme automático de madrugada).
+app.commandLine.appendSwitch("autoplay-policy", "no-user-gesture-required");
+
+const DEV_SERVER_URL = "http://localhost:5180";
+
 let alarmLocked = false;
 let sharedAlarmTime: string = "";
 let windows: BrowserWindow[] = [];
@@ -62,6 +67,7 @@ const applyKiosk = (enable: boolean) => {
     if (enable) {
       win.setAlwaysOnTop(true, "screen-saver");
       win.setKiosk(true);
+      win.setClosable(false);
 
       win.removeAllListeners("blur");
       win.on("blur", () => {
@@ -75,6 +81,7 @@ const applyKiosk = (enable: boolean) => {
     } else {
       win.setKiosk(false);
       win.setAlwaysOnTop(false);
+      win.setClosable(true);
       win.removeAllListeners("blur");
     }
   });
@@ -140,7 +147,11 @@ const createWindows = () => {
       }
     });
 
-    win.loadURL("http://localhost:5173");
+    if (app.isPackaged) {
+      win.loadFile(path.join(__dirname, "../dist/index.html"));
+    } else {
+      win.loadURL(DEV_SERVER_URL);
+    }
 
     windows.push(win);
   }

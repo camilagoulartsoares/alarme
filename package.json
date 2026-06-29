@@ -4,7 +4,8 @@
   "private": true,
   "main": "electron/main.js",
 "scripts": {
-  "dev": "concurrently -k \"vite\" \"tsc -p tsconfig.electron.json --watch\" \"wait-on http://localhost:5173 && electron dist-electron/main.js\"",
+  "predev": "fuser -k 5180/tcp 2>/dev/null || true",
+  "dev": "concurrently -k \"vite\" \"tsc -p tsconfig.electron.json --watch\" \"wait-on http://localhost:5180 && electron dist-electron/main.js\"",
   "dev:web": "vite --host 0.0.0.0",
   "build": "tsc -p tsconfig.electron.json && vite build",
   "start": "electron dist-electron/main.js"

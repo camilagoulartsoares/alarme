@@ -3,11 +3,32 @@ let oscillators: OscillatorNode[] = [];
 let gain: GainNode | null = null;
 let intervalId: number | null = null;
 
-export function startLoudAlarm() {
+async function ensureAudioRunning() {
+  if (!audioCtx || audioCtx.state === "closed") {
+    audioCtx = new window.AudioContext();
+  }
+
+  if (audioCtx.state === "suspended") {
+    await audioCtx.resume();
+  }
+
+  return audioCtx;
+}
+
+export async function unlockAudio() {
+  try {
+    await ensureAudioRunning();
+  } catch (error) {
+    console.error("Erro ao desbloquear áudio:", error);
+  }
+}
+
+export async function startLoudAlarm() {
   stopLoudAlarm();
 
   try {
-    audioCtx = new window.AudioContext();
+    const ctx = await ensureAudioRunning();
+    audioCtx = ctx;
 
     gain = audioCtx.createGain();
     gain.gain.value = 0.95;
@@ -86,13 +107,5 @@ export function stopLoudAlarm() {
     } catch {}
 
     gain = null;
-  }
-
-  if (audioCtx) {
-    try {
-      audioCtx.close();
-    } catch {}
-
-    audioCtx = null;
   }
 }

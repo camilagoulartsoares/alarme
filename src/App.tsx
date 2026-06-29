@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import "./App.css";
-import { startLoudAlarm, stopLoudAlarm } from "./renderer/alarmSound";
+import { startLoudAlarm, stopLoudAlarm, unlockAudio } from "./renderer/alarmSound";
 
 export default function App() {
   const DEFAULT_ALARM_TIME = "04:00";
@@ -26,8 +26,7 @@ export default function App() {
     stopLoudAlarm();
     clearCloseTimer();
 
-    window.electronAPI?.setAlarmStatus(false);
-    window.electronAPI?.forceCloseAll?.();
+    window.electronAPI?.forceCloseAll();
   };
 
   const stopAlarm = () => {
@@ -38,31 +37,44 @@ export default function App() {
 
     setIsRinging(false);
     setCanClose(true);
-
-    window.electronAPI?.setAlarmStatus(true);
-    window.electronAPI?.setAlarmTime(alarmTime);
   };
 
   const triggerAlarm = useCallback(() => {
     setIsRinging(true);
     setCanClose(false);
 
-    window.electronAPI?.setAlarmStatus(true);
-
-    startLoudAlarm();
+    void startLoudAlarm();
 
     clearCloseTimer();
 
     timerRef.current = window.setTimeout(() => {
       setCanClose(true);
-      window.electronAPI?.setAlarmStatus(false);
     }, UNLOCK_DELAY_MS);
   }, []);
 
   useEffect(() => {
-    window.electronAPI?.setAlarmTime(alarmTime);
-    window.electronAPI?.setAlarmStatus(true);
+    const unlockOnInteraction = () => {
+      void unlockAudio();
+    };
 
+    window.addEventListener("pointerdown", unlockOnInteraction);
+    window.addEventListener("keydown", unlockOnInteraction);
+
+    return () => {
+      window.removeEventListener("pointerdown", unlockOnInteraction);
+      window.removeEventListener("keydown", unlockOnInteraction);
+    };
+  }, []);
+
+  useEffect(() => {
+    window.electronAPI?.setAlarmTime(alarmTime);
+  }, [alarmTime]);
+
+  useEffect(() => {
+    window.electronAPI?.setAlarmStatus(isRinging && !canClose);
+  }, [isRinging, canClose]);
+
+  useEffect(() => {
     const interval = window.setInterval(() => {
       if (!alarmTime || isRinging) return;
 
@@ -93,7 +105,7 @@ export default function App() {
 
   return (
     <div className={`alarm-wrapper ${isRinging ? "ringing-mode" : ""}`}>
-      <button className="close-button" onClick={closeApp}>
+      <button type="button" className="close-button" onClick={closeApp}>
         ×
       </button>
 
