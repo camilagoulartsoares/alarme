@@ -93,6 +93,11 @@ button {
   opacity: 0.72;
 }
 
+.alarm-wrapper::selection {
+  color: #06111f;
+  background: #9ddcff;
+}
+
 .ringing-mode {
   background:
     radial-gradient(circle at center, rgba(255, 82, 82, 0.48), transparent 38%),
@@ -143,6 +148,16 @@ button {
     linear-gradient(145deg, rgba(255, 255, 255, 0.08), transparent 32%),
     var(--bg-card);
   animation: fadeIn 0.5s ease-in-out;
+}
+
+.picker-overlay::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 12%;
+  left: 12%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(167, 224, 255, 0.9), transparent);
 }
 
 .picker-container {
@@ -248,6 +263,7 @@ h1 {
     0 0 30px rgba(66, 165, 245, 0.14);
   font-size: clamp(2.25rem, 9vw, 3.35rem);
   text-align: center;
+  color-scheme: dark;
   transition: border-color var(--transition), box-shadow var(--transition), transform var(--transition);
 }
 
@@ -306,6 +322,7 @@ button.close-app:hover::before {
 
 .confirm-btn {
   background: linear-gradient(135deg, var(--blue-strong), var(--blue));
+  letter-spacing: 0.015em;
 }
 
 .secondary-btn,
@@ -550,4 +567,10 @@ button.repeat:hover {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+button:focus-visible,
+input:focus-visible {
+  outline: 3px solid rgba(157, 220, 255, 0.95);
+  outline-offset: 4px;
 }

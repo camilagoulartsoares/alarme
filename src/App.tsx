@@ -105,20 +105,23 @@ export default function App() {
 
   return (
     <div className={`alarm-wrapper ${isRinging ? "ringing-mode" : ""}`}>
-      <button type="button" className="close-button" onClick={closeApp}>
+      <button type="button" className="close-button" onClick={closeApp} aria-label="Fechar despertador">
         ×
       </button>
 
       {!isRinging && (
         <div className="picker-overlay">
           <div className="picker-container active-alarm">
-            <div className="alarm-icon active">⏰</div>
+            <div className="alarm-icon active" aria-hidden="true">⏰</div>
 
             <span className="small-title">Despertador</span>
 
             <h1>Alarme diário definido</h1>
 
-            <div className="top-clock">{alarmTime} ⏰</div>
+            <div className="top-clock">
+              <span>{alarmTime}</span>
+              <span className="clock-icon" aria-hidden="true">⏰</span>
+            </div>
 
             <p className="description">
               Escolha um horário para testar ou deixe às 04:00.
@@ -126,11 +129,12 @@ export default function App() {
 
             <input
               type="time"
+              className="picker-input"
               value={alarmTime}
               onChange={(e) => setAlarmTime(e.target.value)}
             />
 
-            <button type="button" onClick={triggerAlarm}>
+            <button type="button" className="confirm-btn" onClick={triggerAlarm}>
               Testar alarme agora
             </button>
 
@@ -143,7 +147,7 @@ export default function App() {
 
       {isRinging && (
         <div className="alarm-card">
-          <div className="ring-badge">🔔</div>
+          <div className="ring-badge" aria-hidden="true">🔔</div>
 
           <div className="alarm-time">TOCANDO</div>
 
