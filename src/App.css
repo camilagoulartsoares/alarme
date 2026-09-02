@@ -292,6 +292,7 @@ h1 {
   font-size: clamp(2.25rem, 9vw, 3.35rem);
   text-align: center;
   color-scheme: dark;
+  font-variant-numeric: tabular-nums;
   transition: border-color var(--transition), box-shadow var(--transition), transform var(--transition);
 }
 
@@ -351,6 +352,10 @@ button.close-app:hover::before {
 .confirm-btn {
   background: linear-gradient(135deg, var(--blue-strong), var(--blue));
   letter-spacing: 0.015em;
+  border: 1px solid rgba(197, 233, 255, 0.22);
+  box-shadow:
+    0 11px 26px rgba(0, 0, 0, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .secondary-btn,
@@ -595,6 +600,13 @@ button.repeat:hover {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+.confirm-btn:active,
+.secondary-btn:active,
+button.stop:active,
+button.close-app:active {
+  transform: translateY(1px) scale(0.985);
 }
 
 button:focus-visible,
