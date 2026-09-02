@@ -147,6 +147,11 @@ button {
   -webkit-backdrop-filter: blur(22px);
 }
 
+.picker-overlay,
+.alarm-card {
+  overflow: hidden;
+}
+
 .picker-overlay {
   padding: clamp(1.5rem, 4vw, 2.45rem);
   background:
@@ -163,6 +168,24 @@ button {
   left: 12%;
   height: 1px;
   background: linear-gradient(90deg, transparent, rgba(167, 224, 255, 0.9), transparent);
+}
+
+.picker-overlay::after {
+  content: "";
+  position: absolute;
+  right: -28%;
+  bottom: -48%;
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(91, 185, 255, 0.16), transparent 67%);
+  pointer-events: none;
+}
+
+.picker-container,
+.alarm-card > * {
+  position: relative;
+  z-index: 1;
 }
 
 .picker-container {
