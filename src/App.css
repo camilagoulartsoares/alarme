@@ -219,6 +219,7 @@ button {
 .alarm-icon.active {
   color: var(--green);
   text-shadow: 0 0 18px rgba(140, 255, 176, 0.45);
+  animation: iconFloat 3.6s ease-in-out infinite;
 }
 
 .small-title {
@@ -628,6 +629,17 @@ button.repeat:hover {
 
   to {
     transform: translateX(2%) scale(1.04);
+  }
+}
+
+@keyframes iconFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-5px);
   }
 }
 
