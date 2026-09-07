@@ -494,20 +494,21 @@ button.repeat:hover {
   z-index: 9999;
   width: 46px;
   height: 46px;
-  border: none;
-  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
   color: white;
-  background: rgba(229, 57, 53, 0.94);
+  background: linear-gradient(145deg, rgba(255, 106, 101, 0.96), rgba(190, 28, 28, 0.96));
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.42);
   font-size: 1.8rem;
   font-weight: bold;
   line-height: 1;
   cursor: pointer;
+  backdrop-filter: blur(10px);
   transition: transform var(--transition), background var(--transition), box-shadow var(--transition);
 }
 
 .close-button:hover {
-  background: #c62828;
+  background: linear-gradient(145deg, #ff625d, #b71c1c);
   transform: scale(1.05);
   box-shadow: 0 14px 30px rgba(198, 40, 40, 0.32);
 }
