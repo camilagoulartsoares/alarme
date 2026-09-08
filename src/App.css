@@ -476,6 +476,7 @@ button.close-app:hover {
 }
 
 .ring-badge {
+  position: relative;
   background:
     linear-gradient(145deg, rgba(255, 82, 82, 0.42), rgba(255, 255, 255, 0.1)),
     rgba(255, 255, 255, 0.04);
@@ -483,6 +484,15 @@ button.close-app:hover {
     0 16px 34px rgba(0, 0, 0, 0.36),
     0 0 36px rgba(255, 82, 82, 0.18);
   animation: ringBell 0.7s infinite;
+}
+
+.ring-badge::after {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  border: 1px solid rgba(255, 151, 151, 0.22);
+  border-radius: inherit;
+  animation: alarmHalo 1.4s ease-out infinite;
 }
 
 .alarm-time {
@@ -682,6 +692,18 @@ button.repeat:hover {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+@keyframes alarmHalo {
+  from {
+    opacity: 0.8;
+    transform: scale(0.9);
+  }
+
+  to {
+    opacity: 0;
+    transform: scale(1.18);
   }
 }
 
