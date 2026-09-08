@@ -259,6 +259,14 @@ h1::after {
   font-family: Arial, sans-serif;
   font-size: 1rem;
   line-height: 1.55;
+  text-wrap: balance;
+}
+
+.picker-container .description:last-child {
+  padding-top: 0.2rem;
+  border-top: 1px solid rgba(167, 220, 255, 0.1);
+  color: #b7cce8;
+  font-size: 0.92rem;
 }
 
 .top-clock {
