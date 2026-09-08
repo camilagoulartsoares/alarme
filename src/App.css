@@ -279,6 +279,7 @@ h1::after {
 }
 
 .top-clock {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -299,6 +300,22 @@ h1::after {
     inset 0 0 0 1px rgba(255, 255, 255, 0.08),
     0 0 40px rgba(66, 165, 245, 0.11);
   text-shadow: 0 0 24px rgba(66, 165, 245, 0.5);
+  overflow: hidden;
+}
+
+.top-clock::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 12%;
+  width: 76%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(210, 242, 255, 0.72), transparent);
+}
+
+.top-clock > * {
+  position: relative;
+  z-index: 1;
 }
 
 .top-clock span:first-child {
