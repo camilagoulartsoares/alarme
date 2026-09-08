@@ -472,6 +472,7 @@ button.close-app:hover {
   background: rgba(255, 255, 255, 0.09);
   font-size: 0.68rem;
   font-weight: 800;
+  letter-spacing: 0.025em;
   letter-spacing: 0.18em;
 }
 
@@ -518,6 +519,10 @@ button.close-app:hover {
   justify-content: center;
   gap: 1rem;
   flex-wrap: wrap;
+}
+
+.alarm-buttons button {
+  min-width: 188px;
 }
 
 button.stop {
