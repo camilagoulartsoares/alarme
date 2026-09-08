@@ -228,6 +228,15 @@ button {
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.24rem;
+  text-shadow: 0 0 14px rgba(125, 211, 252, 0.28);
+}
+
+.small-title::before,
+.small-title::after {
+  content: "•";
+  margin: 0 0.55rem;
+  color: var(--green);
+  text-shadow: 0 0 10px rgba(140, 255, 176, 0.75);
 }
 
 h1 {
