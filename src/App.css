@@ -489,6 +489,10 @@ button.close-app:hover {
   animation: slideUp 0.4s ease, alarmShake 0.55s infinite;
 }
 
+.alarm-card {
+  border-color: rgba(255, 174, 174, 0.24);
+}
+
 .confirm-btn:hover {
   letter-spacing: 0.045em;
 }
@@ -509,6 +513,7 @@ button.close-app:hover {
   font-weight: 800;
   letter-spacing: 0.025em;
   letter-spacing: 0.18em;
+  box-shadow: 0 0 18px rgba(255, 82, 82, 0.12);
 }
 
 .ring-badge {
