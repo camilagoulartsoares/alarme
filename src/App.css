@@ -229,6 +229,10 @@ button {
 .alarm-icon.active {
   color: var(--green);
   text-shadow: 0 0 18px rgba(140, 255, 176, 0.45);
+  border-color: rgba(140, 255, 176, 0.3);
+  box-shadow:
+    0 16px 34px rgba(0, 0, 0, 0.36),
+    0 0 32px rgba(140, 255, 176, 0.18);
   animation: iconFloat 3.6s ease-in-out infinite;
 }
 
