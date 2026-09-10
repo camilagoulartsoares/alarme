@@ -729,6 +729,17 @@ button.repeat:hover {
   .top-clock {
     min-width: 100%;
   }
+
+  .close-button {
+    top: 0.75rem;
+    right: 0.75rem;
+    width: 42px;
+    height: 42px;
+  }
+
+  .small-title {
+    letter-spacing: 0.17rem;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
