@@ -446,6 +446,12 @@ button.close-app:hover::before {
     0 0 34px rgba(66, 165, 245, 0.2);
 }
 
+.picker-input::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  filter: invert(87%) sepia(40%) saturate(624%) hue-rotate(163deg) brightness(102%);
+  opacity: 0.82;
+}
+
 .secondary-btn,
 button.close-app {
   border: 1px solid rgba(255, 255, 255, 0.16);
