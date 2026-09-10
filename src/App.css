@@ -544,6 +544,8 @@ button.close-app:hover {
   text-shadow:
     0 0 18px rgba(255, 82, 82, 0.5),
     0 0 48px rgba(255, 82, 82, 0.26);
+  font-variant-numeric: tabular-nums;
+  text-transform: uppercase;
   animation: pulse 1s infinite;
 }
 
