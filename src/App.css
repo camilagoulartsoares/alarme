@@ -209,6 +209,10 @@ button {
   gap: 1.15rem;
 }
 
+.picker-container > .description {
+  max-width: 38ch;
+}
+
 .alarm-icon,
 .ring-badge {
   width: 78px;
