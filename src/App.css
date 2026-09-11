@@ -244,6 +244,9 @@ button {
 }
 
 .small-title {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   color: #a8dcff;
   font-size: 0.78rem;
   font-weight: 800;
