@@ -366,6 +366,12 @@ h1::after {
   font-size: clamp(1.65rem, 5vw, 2.1rem);
   opacity: 0.95;
   filter: drop-shadow(0 0 10px rgba(125, 211, 252, 0.46));
+  transition: transform var(--transition), filter var(--transition);
+}
+
+.top-clock:hover .clock-icon {
+  transform: rotate(8deg) scale(1.06);
+  filter: drop-shadow(0 0 14px rgba(125, 211, 252, 0.72));
 }
 
 .picker-input {
