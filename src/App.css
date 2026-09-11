@@ -269,6 +269,7 @@ h1 {
   font-size: clamp(2rem, 7vw, 3.18rem);
   line-height: 1.04;
   letter-spacing: -0.04em;
+  text-wrap: balance;
   text-shadow:
     0 0 24px rgba(66, 165, 245, 0.26),
     0 2px 18px rgba(0, 0, 0, 0.42);
