@@ -607,11 +607,12 @@ button.repeat:hover {
   border: 1px solid rgba(255, 255, 255, 0.11);
   border-radius: 1rem;
   color: #ffcaca;
-  background: rgba(255, 255, 255, 0.09);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0.06));
   font-family: Arial, sans-serif;
   font-size: 1rem;
   line-height: 1.45;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  text-wrap: balance;
 }
 
 .close-button {
