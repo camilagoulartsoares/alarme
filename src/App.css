@@ -473,7 +473,8 @@ button.close-app:hover::before {
 .secondary-btn,
 button.close-app {
   border: 1px solid rgba(255, 255, 255, 0.16);
-  background: rgba(255, 255, 255, 0.1);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.07));
+  backdrop-filter: blur(8px);
 }
 
 .confirm-btn:hover,
