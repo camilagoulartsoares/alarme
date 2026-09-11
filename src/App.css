@@ -160,6 +160,7 @@ button {
   background:
     linear-gradient(145deg, rgba(255, 255, 255, 0.08), transparent 32%),
     var(--bg-card);
+  background-blend-mode: screen, normal;
   animation: fadeIn 0.5s ease-in-out;
   transition: border-color var(--transition), box-shadow var(--transition);
 }
