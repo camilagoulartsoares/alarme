@@ -87,7 +87,7 @@ button {
     linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
   background-size: 44px 44px;
-  opacity: 0.72;
+  opacity: 0.76;
   background-position: center center;
   mask-image: radial-gradient(circle at center, black 0%, transparent 76%);
 }
