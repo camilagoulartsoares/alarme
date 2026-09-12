@@ -381,6 +381,7 @@ h1::after {
   border-radius: 1.25rem;
   outline: none;
   color: #ffffff;
+  caret-color: var(--cyan);
   background:
     linear-gradient(145deg, rgba(255, 255, 255, 0.05), transparent 40%),
     rgba(5, 11, 22, 0.96);
