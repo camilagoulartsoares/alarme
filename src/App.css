@@ -588,6 +588,7 @@ button.close-app:hover {
 
 button.stop {
   background: linear-gradient(135deg, #ff5252, var(--danger-strong));
+  border: 1px solid rgba(255, 214, 214, 0.2);
 }
 
 button.stop:hover {
