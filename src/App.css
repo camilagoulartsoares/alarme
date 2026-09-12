@@ -311,7 +311,7 @@ h1::after {
   gap: 1rem;
   min-width: min(100%, 420px);
   padding: 1.05rem 1.5rem;
-  border: 1px solid rgba(144, 202, 249, 0.22);
+  border: 1px solid rgba(144, 202, 249, 0.3);
   border-radius: 1.45rem;
   user-select: none;
   color: #eaf7ff;
