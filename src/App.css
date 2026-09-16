@@ -69,6 +69,15 @@ button {
   isolation: isolate;
 }
 
+.alarm-wrapper {
+  background-attachment: fixed;
+}
+
+.alarm-wrapper::selection {
+  color: #06111f;
+  background: #9ddcff;
+}
+
 .alarm-wrapper > * {
   position: relative;
 }
