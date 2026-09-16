@@ -369,6 +369,7 @@ h1::after {
 .top-clock span:first-child {
   font-variant-numeric: tabular-nums;
   font-weight: 700;
+  font-feature-settings: "tnum" 1, "lnum" 1;
   background: linear-gradient(180deg, #ffffff 12%, #a9ddff 100%);
   -webkit-background-clip: text;
   background-clip: text;
