@@ -780,6 +780,10 @@ button.repeat:hover {
     min-width: 100%;
   }
 
+  .picker-input {
+    border-radius: 1.05rem;
+  }
+
   .close-button {
     top: 0.75rem;
     right: 0.75rem;
