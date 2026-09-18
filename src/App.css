@@ -463,9 +463,9 @@ button.close-app:hover::before {
 }
 
 .confirm-btn {
-  background: linear-gradient(135deg, var(--blue-strong), var(--blue));
-  letter-spacing: 0.015em;
-  border: 1px solid rgba(197, 233, 255, 0.22);
+  background: linear-gradient(135deg, #176bc3, #59b7ff);
+  letter-spacing: 0.03em;
+  border: 1px solid rgba(214, 241, 255, 0.3);
   box-shadow:
     0 11px 26px rgba(0, 0, 0, 0.34),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
@@ -501,14 +501,14 @@ button.close-app:hover {
 }
 
 .confirm-btn:hover {
-  background: linear-gradient(135deg, #0d47a1, #1e88e5);
-  box-shadow: 0 16px 34px rgba(30, 136, 229, 0.32);
+  background: linear-gradient(135deg, #125baa, #44abf6);
+  box-shadow: 0 16px 36px rgba(68, 171, 246, 0.38);
 }
 
 .confirm-btn:focus-visible {
   box-shadow:
-    0 0 0 4px rgba(157, 220, 255, 0.26),
-    0 16px 34px rgba(30, 136, 229, 0.32);
+    0 0 0 4px rgba(154, 223, 255, 0.3),
+    0 16px 36px rgba(68, 171, 246, 0.38);
 }
 
 .secondary-btn:hover,
