@@ -1,19 +1,19 @@
 @import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700;800&display=swap");
 
 :root {
-  --bg-deep: #050816;
-  --bg-navy: #08152a;
+  --bg-deep: #040713;
+  --bg-navy: #0a1831;
   --bg-card: rgba(12, 20, 40, 0.78);
   --bg-card-strong: rgba(8, 14, 30, 0.92);
-  --blue: #42a5f5;
-  --blue-strong: #1565c0;
-  --purple: #7e57c2;
-  --cyan: #7dd3fc;
-  --green: #8cffb0;
+  --blue: #59b7ff;
+  --blue-strong: #1976d2;
+  --purple: #9271dc;
+  --cyan: #9adfff;
+  --green: #97f7bb;
   --danger: #ff5252;
   --danger-strong: #b71c1c;
   --text: #f7fbff;
-  --muted: #c8d8ef;
+  --muted: #d1e0f5;
   --soft-border: rgba(255, 255, 255, 0.14);
   --glow-blue: rgba(66, 165, 245, 0.35);
   --glow-red: rgba(255, 82, 82, 0.35);
