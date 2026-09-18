@@ -61,11 +61,11 @@ button {
   overflow: hidden;
   text-align: center;
   background:
-    radial-gradient(circle at 12% 8%, rgba(66, 165, 245, 0.32), transparent 30%),
-    radial-gradient(circle at 88% 82%, rgba(126, 87, 194, 0.32), transparent 32%),
-    radial-gradient(circle at 48% 40%, rgba(59, 130, 246, 0.1), transparent 28%),
-    radial-gradient(circle at 50% 110%, rgba(125, 211, 252, 0.14), transparent 38%),
-    linear-gradient(135deg, #050816 0%, #091f3d 48%, #070a18 100%);
+    radial-gradient(circle at 12% 8%, rgba(89, 183, 255, 0.38), transparent 29%),
+    radial-gradient(circle at 88% 82%, rgba(146, 113, 220, 0.36), transparent 31%),
+    radial-gradient(circle at 48% 42%, rgba(45, 126, 230, 0.13), transparent 30%),
+    radial-gradient(circle at 50% 110%, rgba(154, 223, 255, 0.17), transparent 40%),
+    linear-gradient(135deg, #040713 0%, #0a2144 48%, #080b1c 100%);
   isolation: isolate;
 }
 
@@ -96,7 +96,7 @@ button {
     linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
   background-size: 44px 44px;
-  opacity: 0.76;
+  opacity: 0.64;
   background-position: center center;
   mask-image: radial-gradient(circle at center, black 0%, transparent 76%);
 }
