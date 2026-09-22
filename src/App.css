@@ -268,6 +268,15 @@ button {
   animation: iconFloat 4.2s ease-in-out infinite;
 }
 
+.alarm-icon.active::after {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border: 1px solid rgba(205, 255, 221, 0.16);
+  border-radius: inherit;
+  pointer-events: none;
+}
+
 .small-title {
   display: inline-flex;
   align-items: center;
