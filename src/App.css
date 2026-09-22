@@ -542,6 +542,12 @@ button.close-app:hover {
   box-shadow: 0 16px 36px rgba(68, 171, 246, 0.38);
 }
 
+.confirm-btn:active {
+  box-shadow:
+    0 7px 16px rgba(0, 0, 0, 0.34),
+    inset 0 2px 8px rgba(5, 35, 75, 0.22);
+}
+
 .confirm-btn:focus-visible {
   box-shadow:
     0 0 0 4px rgba(154, 223, 255, 0.3),
