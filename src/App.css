@@ -680,6 +680,18 @@ button.repeat:hover {
   text-wrap: balance;
 }
 
+.waiting::before {
+  content: "";
+  display: inline-block;
+  width: 0.48rem;
+  height: 0.48rem;
+  margin-right: 0.55rem;
+  border-radius: 50%;
+  background: #ffb4b4;
+  box-shadow: 0 0 10px rgba(255, 150, 150, 0.82);
+  vertical-align: middle;
+}
+
 .close-button {
   position: fixed;
   top: 1rem;
