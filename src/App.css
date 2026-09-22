@@ -190,6 +190,14 @@ button {
     inset 0 1px 0 rgba(255, 255, 255, 0.18);
 }
 
+.picker-overlay:focus-within {
+  border-color: rgba(154, 223, 255, 0.44);
+  box-shadow:
+    var(--shadow-xl),
+    0 0 64px rgba(89, 183, 255, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
 .picker-overlay::before {
   content: "";
   position: absolute;
