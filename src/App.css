@@ -514,6 +514,12 @@ button.close-app:hover::before {
   cursor: pointer;
   filter: invert(87%) sepia(40%) saturate(624%) hue-rotate(163deg) brightness(102%);
   opacity: 0.82;
+  transition: opacity var(--transition), transform var(--transition);
+}
+
+.picker-input::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+  transform: scale(1.12);
 }
 
 .secondary-btn,
