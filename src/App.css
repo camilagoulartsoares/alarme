@@ -73,6 +73,10 @@ button {
   background-attachment: fixed;
 }
 
+.alarm-wrapper {
+  background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%;
+}
+
 .alarm-wrapper::selection {
   color: #06111f;
   background: #9ddcff;
