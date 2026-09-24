@@ -166,6 +166,13 @@ button {
 }
 
 .picker-overlay,
+.alarm-card,
+.top-clock,
+.picker-input {
+  -webkit-font-smoothing: antialiased;
+}
+
+.picker-overlay,
 .alarm-card {
   overflow: hidden;
 }
