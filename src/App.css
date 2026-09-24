@@ -401,6 +401,10 @@ h1::after {
   background: linear-gradient(90deg, transparent, rgba(210, 242, 255, 0.72), transparent);
 }
 
+.top-clock {
+  isolation: isolate;
+}
+
 .top-clock::after {
   content: "";
   position: absolute;
