@@ -222,6 +222,16 @@ button {
   pointer-events: none;
 }
 
+.picker-overlay .picker-container::before {
+  content: "";
+  position: absolute;
+  inset: -0.6rem;
+  z-index: -1;
+  border-radius: calc(var(--radius-xl) - 0.35rem);
+  background: radial-gradient(circle at 50% 0%, rgba(186, 229, 255, 0.08), transparent 48%);
+  pointer-events: none;
+}
+
 .picker-container,
 .alarm-card > * {
   position: relative;
