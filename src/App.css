@@ -555,6 +555,10 @@ button.close-app:hover::before {
   transform: scale(1.12);
 }
 
+.picker-input::-webkit-datetime-edit {
+  padding: 0.1em 0;
+}
+
 .secondary-btn,
 button.close-app {
   border: 1px solid rgba(255, 255, 255, 0.16);
