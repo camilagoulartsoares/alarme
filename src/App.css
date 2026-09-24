@@ -682,6 +682,10 @@ button.close-app:hover {
   min-width: 188px;
 }
 
+.alarm-buttons button:only-child {
+  min-width: min(100%, 250px);
+}
+
 button.stop {
   background: linear-gradient(135deg, #ff5252, var(--danger-strong));
   border: 1px solid rgba(255, 214, 214, 0.2);
