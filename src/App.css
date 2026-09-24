@@ -900,6 +900,13 @@ button.repeat:hover {
   }
 }
 
+@media (min-width: 900px) {
+  .picker-overlay,
+  .alarm-card {
+    width: min(92vw, 560px);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
