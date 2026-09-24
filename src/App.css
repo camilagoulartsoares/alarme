@@ -350,6 +350,10 @@ h1::after {
   text-wrap: balance;
 }
 
+.description:first-of-type {
+  color: #dbe9f8;
+}
+
 .picker-container .description:last-child {
   padding-top: 0.2rem;
   border-top: 1px solid rgba(167, 220, 255, 0.1);
