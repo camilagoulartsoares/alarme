@@ -757,6 +757,10 @@ button.repeat:hover {
   box-shadow: 0 14px 30px rgba(198, 40, 40, 0.32);
 }
 
+.close-button:active {
+  transform: scale(0.94);
+}
+
 .close-button:focus-visible {
   outline-color: rgba(255, 218, 218, 0.96);
   box-shadow:
