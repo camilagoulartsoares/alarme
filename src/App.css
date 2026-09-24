@@ -890,6 +890,10 @@ button.repeat:hover {
   .small-title {
     letter-spacing: 0.17rem;
   }
+
+  .picker-container {
+    gap: 1rem;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
