@@ -443,6 +443,7 @@ h1::after {
 }
 
 .clock-icon {
+  flex: 0 0 auto;
   font-size: clamp(1.65rem, 5vw, 2.1rem);
   opacity: 0.95;
   filter: drop-shadow(0 0 10px rgba(125, 211, 252, 0.46));
