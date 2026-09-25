@@ -971,6 +971,6 @@ button.close-app:active {
 
 button:focus-visible,
 input:focus-visible {
-  outline: 3px solid rgba(157, 220, 255, 0.95);
+  outline: 3px solid var(--focus-ring);
   outline-offset: 4px;
 }
