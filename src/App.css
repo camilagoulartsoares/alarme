@@ -746,8 +746,8 @@ button.repeat:hover {
 
 .close-button {
   position: fixed;
-  top: 1rem;
-  right: 1rem;
+  top: max(1rem, env(safe-area-inset-top));
+  right: max(1rem, env(safe-area-inset-right));
   z-index: 9999;
   width: 46px;
   height: 46px;
