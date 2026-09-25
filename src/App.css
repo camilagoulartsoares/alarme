@@ -197,6 +197,7 @@ button {
 }
 
 .picker-overlay:hover {
+  transform: translateY(-2px);
   border-color: rgba(174, 223, 255, 0.3);
   box-shadow:
     var(--shadow-xl),
