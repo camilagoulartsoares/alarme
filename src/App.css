@@ -323,7 +323,9 @@ button {
 }
 
 h1 {
+  max-width: 13ch;
   margin: 0;
+  margin-inline: auto;
   color: #ffffff;
   font-size: clamp(2rem, 7vw, 3.18rem);
   line-height: 1.04;
