@@ -508,6 +508,9 @@ button.close-app {
   position: relative;
   overflow: hidden;
   isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   min-height: 48px;
   padding: 0.95rem 1.55rem;
   border: none;
