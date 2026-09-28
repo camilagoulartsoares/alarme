@@ -308,6 +308,7 @@ button {
 
 .small-title {
   display: inline-flex;
+  min-height: 1.1rem;
   align-items: center;
   justify-content: center;
   color: #a8dcff;
