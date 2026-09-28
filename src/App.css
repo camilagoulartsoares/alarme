@@ -387,6 +387,7 @@ h1::after {
   border-radius: 1.6rem;
   user-select: none;
   color: #eaf7ff;
+  line-height: 1;
   font-size: clamp(2.6rem, 10vw, 4.25rem);
   letter-spacing: 0.03em;
   background:
