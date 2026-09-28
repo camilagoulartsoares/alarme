@@ -731,6 +731,9 @@ button.repeat:hover {
 }
 
 .waiting {
+  max-width: 34ch;
+  margin-right: auto;
+  margin-left: auto;
   margin-top: 1.5rem;
   padding: 0.95rem 1rem;
   border: 1px solid rgba(255, 255, 255, 0.11);
