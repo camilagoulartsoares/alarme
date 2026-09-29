@@ -104,7 +104,7 @@ function markHeartbeat() { alarmSettings.lastHeartbeatAt = iso(); saveSettings()
 function createWindows() {
   windows = [];
   for (const display of screen.getAllDisplays()) {
-    const win = new BrowserWindow({ x: display.bounds.x, y: display.bounds.y, width: display.bounds.width, height: display.bounds.height, fullscreen: true, frame: false, webPreferences: { preload: path.join(__dirname, "preload.js"), contextIsolation: true, nodeIntegration: false }, icon: path.join(__dirname, "assets", "alarm-icon.png") });
+    const win = new BrowserWindow({ x: display.bounds.x, y: display.bounds.y, width: 760, height: 720, fullscreen: false, frame: true, webPreferences: { preload: path.join(__dirname, "preload.js"), contextIsolation: true, nodeIntegration: false }, icon: path.join(__dirname, "assets", "alarm-icon.png") });
     win.setMenuBarVisibility(false); win.on("close", (event) => { if (alarmLocked) { event.preventDefault(); win.show(); win.focus(); } });
     win.webContents.on("did-finish-load", () => { log("renderer-loaded", { windowId: win.id }); win.webContents.send("sync-alarm-time", alarmSettings.alarmTime); if (alarmSettings.status === "ringing" || alarmLocked) win.webContents.send("alarm-triggered", alarmSettings.activeKind ?? "test"); });
     win.webContents.on("did-fail-load", (_event, code, description, url) => { log("renderer-load-failed", { windowId: win.id, code, description, url }); setTimeout(() => { if (!win.isDestroyed()) win.reload(); }, 1000); });
