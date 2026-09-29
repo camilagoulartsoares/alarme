@@ -14,12 +14,19 @@ export {};
 declare global {
   interface Window {
     electronAPI: {
-      setAlarmStatus: (status: boolean) => void;
       forceCloseAll: () => void;
       setAlarmTime: (time: string) => void;
       getAlarmTime: () => Promise<string>;
-      onSyncAlarmTime: (callback: (time: string) => void) => void;
-      onSyncAlarmStatus: (callback: (status: boolean) => void) => void;
+      getAlarmState: () => Promise<{
+        alarmTime: string;
+        status: "armed" | "ringing";
+      }>;
+      testAlarm: () => void;
+      alarmStopped: () => void;
+      onSyncAlarmTime: (callback: (time: string) => void) => () => void;
+      onAlarmTriggered: (
+        callback: (kind: "scheduled" | "recovery" | "test") => void
+      ) => () => void;
     };
   }
 }
