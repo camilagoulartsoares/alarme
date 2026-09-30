@@ -714,6 +714,11 @@ button.close-app:hover {
   border-color: rgba(255, 174, 174, 0.24);
 }
 
+.alarm-card {
+  outline: 1px solid rgba(255, 197, 197, 0.11);
+  outline-offset: -10px;
+}
+
 .confirm-btn:hover {
   letter-spacing: 0.045em;
 }
