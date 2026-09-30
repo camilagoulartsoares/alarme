@@ -24,6 +24,8 @@
   --radius-xl: 2rem;
   --radius-lg: 1.35rem;
   --transition: 0.24s ease;
+  --surface-line: rgba(193, 231, 255, 0.18);
+  --surface-shine: rgba(194, 235, 255, 0.1);
 }
 
 * {
