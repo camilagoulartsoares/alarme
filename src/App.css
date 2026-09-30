@@ -349,6 +349,10 @@ button {
   text-shadow: 0 0 14px rgba(125, 211, 252, 0.28);
 }
 
+.small-title {
+  padding: 0.15rem 0;
+}
+
 .small-title::before,
 .small-title::after {
   content: "•";
