@@ -123,6 +123,14 @@ button {
   animation: ambientSheen 10s ease-in-out infinite alternate;
 }
 
+/* Camada de luz ambiente: decorativa, sem interferir na interação. */
+.alarm-wrapper::after {
+  background:
+    radial-gradient(circle at 50% 0%, rgba(143, 215, 255, 0.12), transparent 34%),
+    linear-gradient(115deg, transparent 0%, rgba(255, 255, 255, 0.08) 45%, transparent 62%),
+    radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.4) 100%);
+}
+
 .alarm-wrapper::selection {
   color: #06111f;
   background: #9ddcff;
