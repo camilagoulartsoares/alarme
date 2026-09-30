@@ -676,6 +676,10 @@ button.close-app:hover {
   box-shadow: 0 16px 36px rgba(68, 171, 246, 0.38);
 }
 
+.confirm-btn {
+  min-height: 52px;
+}
+
 .confirm-btn:active {
   box-shadow:
     0 7px 16px rgba(0, 0, 0, 0.34),
