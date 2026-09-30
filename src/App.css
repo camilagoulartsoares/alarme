@@ -116,6 +116,11 @@ button {
   mask-image: radial-gradient(circle at center, black 0%, transparent 76%);
 }
 
+.alarm-wrapper::before {
+  background-size: 44px 44px, 44px 44px;
+  opacity: 0.5;
+}
+
 .alarm-wrapper::after {
   z-index: -1;
   background:
