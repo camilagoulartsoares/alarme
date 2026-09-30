@@ -387,6 +387,11 @@ h1::after {
   box-shadow: 0 0 16px rgba(125, 211, 252, 0.58);
 }
 
+h1::after {
+  width: 68px;
+  background: linear-gradient(90deg, transparent, #c4efff 50%, transparent);
+}
+
 .description {
   max-width: 42ch;
   margin: 0 auto 0.35rem;
