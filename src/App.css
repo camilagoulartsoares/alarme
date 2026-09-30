@@ -861,6 +861,13 @@ button.repeat:hover {
   transition: transform var(--transition), background var(--transition), box-shadow var(--transition);
 }
 
+.close-button {
+  box-shadow:
+    0 10px 24px rgba(0, 0, 0, 0.42),
+    0 0 0 4px rgba(255, 105, 105, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.24);
+}
+
 .close-button:hover {
   background: linear-gradient(145deg, #ff625d, #b71c1c);
   transform: scale(1.05);
