@@ -203,6 +203,16 @@ button {
   transform-origin: center center;
 }
 
+/* Mais profundidade para o painel principal, preservando o layout existente. */
+.picker-overlay {
+  border-color: rgba(184, 227, 255, 0.22);
+  box-shadow:
+    var(--shadow-xl),
+    0 0 0 1px rgba(132, 205, 255, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -28px 54px rgba(4, 10, 28, 0.2);
+}
+
 .picker-overlay {
   transform: translateZ(0);
 }
