@@ -487,6 +487,10 @@ h1::after {
   background: linear-gradient(90deg, transparent, rgba(154, 223, 255, 0.18), transparent);
 }
 
+.top-clock::after {
+  opacity: 0.8;
+}
+
 .top-clock > * {
   position: relative;
   z-index: 1;
