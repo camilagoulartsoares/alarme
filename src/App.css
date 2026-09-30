@@ -443,6 +443,19 @@ h1::after {
   isolation: isolate;
 }
 
+/* Leitura do horário com contraste e brilho mais definidos. */
+.top-clock {
+  border-color: rgba(173, 229, 255, 0.48);
+  background:
+    linear-gradient(180deg, rgba(118, 203, 255, 0.1), transparent 34%),
+    linear-gradient(145deg, #07101f 0%, #141f38 100%);
+  box-shadow:
+    0 18px 42px rgba(0, 0, 0, 0.56),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1),
+    inset 0 10px 24px rgba(143, 215, 255, 0.06),
+    0 0 48px rgba(89, 183, 255, 0.2);
+}
+
 .top-clock::after {
   content: "";
   position: absolute;
