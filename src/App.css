@@ -205,6 +205,11 @@ button {
   transform-origin: center center;
 }
 
+.picker-overlay {
+  outline: 1px solid var(--surface-line);
+  outline-offset: -9px;
+}
+
 /* Mais profundidade para o painel principal, preservando o layout existente. */
 .picker-overlay {
   border-color: rgba(184, 227, 255, 0.22);
