@@ -1031,6 +1031,12 @@ button.repeat:hover {
   }
 }
 
+@media (min-width: 900px) {
+  .picker-container {
+    gap: 1.28rem;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
