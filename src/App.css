@@ -589,6 +589,21 @@ button.close-app:hover::before {
   text-shadow: 0 1px 2px rgba(5, 24, 50, 0.42);
 }
 
+/* Ação principal mais destacada, sem alterar comportamento do botão. */
+.confirm-btn {
+  background:
+    linear-gradient(135deg, #176bc3 0%, #3297ec 52%, #74c8ff 100%);
+  box-shadow:
+    0 11px 26px rgba(0, 0, 0, 0.34),
+    0 0 24px rgba(89, 183, 255, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.26);
+}
+
+.confirm-btn:focus-visible {
+  outline: 3px solid rgba(198, 239, 255, 0.9);
+  outline-offset: 4px;
+}
+
 .picker-input:hover:not(:focus) {
   border-color: rgba(144, 202, 249, 0.46);
   box-shadow:
