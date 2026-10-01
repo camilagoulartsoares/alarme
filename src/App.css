@@ -419,6 +419,10 @@ h1::after {
   color: #dbe9f8;
 }
 
+.description {
+  text-shadow: 0 1px 12px rgba(2, 10, 25, 0.24);
+}
+
 .picker-container .description:last-child {
   padding-top: 0.2rem;
   border-top: 1px solid rgba(167, 220, 255, 0.1);
