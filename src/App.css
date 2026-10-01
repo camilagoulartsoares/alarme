@@ -81,6 +81,10 @@ button {
 }
 
 .alarm-wrapper {
+  background-color: #07101f;
+}
+
+.alarm-wrapper {
   background-attachment: fixed;
 }
 
