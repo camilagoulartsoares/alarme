@@ -260,6 +260,10 @@ button {
   background: linear-gradient(90deg, transparent, rgba(167, 224, 255, 0.9), transparent);
 }
 
+.picker-overlay::before {
+  filter: drop-shadow(0 0 5px rgba(167, 224, 255, 0.36));
+}
+
 .picker-overlay::after {
   content: "";
   position: absolute;
