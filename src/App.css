@@ -567,6 +567,10 @@ h1::after {
     0 0 42px rgba(89, 183, 255, 0.34);
 }
 
+.picker-input {
+  text-shadow: 0 0 18px rgba(169, 221, 255, 0.14);
+}
+
 .picker-input::selection {
   color: #06111f;
   background: var(--cyan);
