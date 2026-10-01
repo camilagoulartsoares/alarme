@@ -1042,6 +1042,11 @@ button.repeat:hover {
   .picker-container {
     gap: 1rem;
   }
+
+  .picker-overlay::before {
+    right: 18%;
+    left: 18%;
+  }
 }
 
 @media (min-width: 900px) {
